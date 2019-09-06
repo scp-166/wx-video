@@ -1,0 +1,75 @@
+# 请注意，聚合项目的文件夹和文件全局课件
+
+mybatis:
+  type-aliases-package: com.nekosighed.mybatisGenerator.pojo.model  # 扫描的model类, 这里用到了 pojo 模块 的 com.nekosighed.mybatisGenerator.pojo.model 文件夹
+  configuration:
+    default-fetch-size: 100
+    default-statement-timeout: 3000
+    map-underscore-to-camel-case: true  # mapper中的下划线和pojo的驼峰对应
+  mapper-locations: classpath:mapper/*.xml  # mapper的xml文件位置, classpath介绍:  https://blog.csdn.net/mrl6140x/article/details/78077942
+#  config-location: classpath:mybatis/mybatis-config.xml  # 属性映射 https://coding.imooc.com/lesson/217.html#mid=14256
+
+# 通用 mapper 配置
+mapper:
+  mappers: com.nekosighed.common.utils.MyMapper # 配置项，这里用到了 common 模块的 com.nekosighed.common.utils.MyMapper.class
+  not-empty: false
+  identity: MYSQL
+
+# 分页插件配置
+pageHelper:
+  support-methods-arguments: true
+  params: count=countSql
+  helper-dialect: mysql
+  reasonable: true
+
+logging:
+  level:
+    ROOT: INFO  # 最低可见等级
+    com.nekosighed.api: INFO  # 指定某些包最低可显示(聚合项目全局可见)
+
+# springboot 2.x 上下载文件的设置
+# https://blog.csdn.net/qq_28089993/article/details/76854112#commentBox
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 1000MB
+
+  datasource:
+    # 数据源
+    # &allowMultiQueries=true  允许<delete>中多条删除
+    url: jdbc:mysql://www.nekosighed.com:3306/video
+#    ?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowMultiQueries=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: lyl591300.
+
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    druid:
+      #引用上面的JDBC配置
+      url: ${spring.datasource.url}
+      username: ${spring.datasource.username}
+      password: ${spring.datasource.password}
+      driver-class-name: ${spring.datasource.driver-class-name}
+      #配置初始化连接数大小
+      initial-size: 10
+      # 最大连接数
+      max-active: 50
+      #最小连接数
+      min-idle: 10
+      #获取连接等待超时时间
+      max-wait: 5000
+
+      test-on-borrow: false #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+      test-on-return: false #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+      test-while-idle: true #建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+      # StatViewServlet配置。（因为暴露的监控信息比较敏感，支持密码加密和访问ip限定）
+      stat-view-servlet:
+        allow: true
+
+server:
+  port: 8080
+  #  编码
+  tomcat:
+    uri-encoding: UTF-8
