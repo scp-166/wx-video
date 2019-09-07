@@ -1,11 +1,44 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="mybatisGenerator.mapper.SearchRecordsMapper" >
-  <resultMap id="BaseResultMap" type="com.nekosighed.pojo.model.SearchRecords" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nekosighed.mapper.mapper.SearchRecordsMapper">
+  <resultMap id="BaseResultMap" type="com.nekosighed.pojo.model.SearchRecords">
     <!--
-      WARNING - @mbg.generated
     -->
-    <result column="id" property="id" jdbcType="VARCHAR" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
+    <constructor>
+      <idArg column="id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
   </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--
+    -->
+    delete from search_records
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nekosighed.pojo.model.SearchRecords">
+    <!--
+    -->
+    insert into search_records (id, content)
+    values (#{id,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.nekosighed.pojo.model.SearchRecords">
+    <!--
+    -->
+    update search_records
+    set content = #{content,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--
+    -->
+    select id, content
+    from search_records
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    <!--
+    -->
+    select id, content
+    from search_records
+  </select>
 </mapper>

@@ -1,18 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mybatisGenerator.mapper.UsersMapper">
+<mapper namespace="com.nekosighed.mapper.mapper.UsersMapper">
   <resultMap id="BaseResultMap" type="com.nekosighed.pojo.model.Users">
     <!--
-      WARNING - @mbg.generated
     -->
-    <result column="id" jdbcType="VARCHAR" property="id" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="face_image" jdbcType="VARCHAR" property="faceImage" />
-    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
-    <result column="fans_counts" jdbcType="INTEGER" property="fansCounts" />
-    <result column="follow_counts" jdbcType="INTEGER" property="followCounts" />
-    <result column="receive_like_counts" jdbcType="INTEGER" property="receiveLikeCounts" />
+    <constructor>
+      <idArg column="id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="username" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="face_image" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="nickname" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="fans_counts" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="follow_counts" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="receive_like_counts" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
   </resultMap>
-
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--
+    -->
+    delete from users
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nekosighed.pojo.model.Users">
+    <!--
+    -->
+    insert into users (id, username, password, 
+      face_image, nickname, fans_counts, 
+      follow_counts, receive_like_counts)
+    values (#{id,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{faceImage,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, #{fansCounts,jdbcType=INTEGER}, 
+      #{followCounts,jdbcType=INTEGER}, #{receiveLikeCounts,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.nekosighed.pojo.model.Users">
+    <!--
+    -->
+    update users
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      face_image = #{faceImage,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      fans_counts = #{fansCounts,jdbcType=INTEGER},
+      follow_counts = #{followCounts,jdbcType=INTEGER},
+      receive_like_counts = #{receiveLikeCounts,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--
+    -->
+    select id, username, password, face_image, nickname, fans_counts, follow_counts, 
+    receive_like_counts
+    from users
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    <!--
+    -->
+    select id, username, password, face_image, nickname, fans_counts, follow_counts, 
+    receive_like_counts
+    from users
+  </select>
 </mapper>

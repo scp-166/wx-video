@@ -1,12 +1,48 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="mybatisGenerator.mapper.UsersFansMapper" >
-  <resultMap id="BaseResultMap" type="com.nekosighed.pojo.model.UsersFans" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nekosighed.mapper.mapper.UsersFansMapper">
+  <resultMap id="BaseResultMap" type="com.nekosighed.pojo.model.UsersFans">
     <!--
-      WARNING - @mbg.generated
     -->
-    <result column="id" property="id" jdbcType="VARCHAR" />
-    <result column="user_id" property="userId" jdbcType="VARCHAR" />
-    <result column="fan_id" property="fanId" jdbcType="VARCHAR" />
+    <constructor>
+      <idArg column="id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="user_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="fan_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
   </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--
+    -->
+    delete from users_fans
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nekosighed.pojo.model.UsersFans">
+    <!--
+    -->
+    insert into users_fans (id, user_id, fan_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{fanId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.nekosighed.pojo.model.UsersFans">
+    <!--
+    -->
+    update users_fans
+    set user_id = #{userId,jdbcType=VARCHAR},
+      fan_id = #{fanId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--
+    -->
+    select id, user_id, fan_id
+    from users_fans
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    <!--
+    -->
+    select id, user_id, fan_id
+    from users_fans
+  </select>
 </mapper>

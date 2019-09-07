@@ -1,21 +1,74 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="mybatisGenerator.mapper.VideosMapper" >
-  <resultMap id="BaseResultMap" type="com.nekosighed.pojo.model.Videos" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nekosighed.mapper.mapper.VideosMapper">
+  <resultMap id="BaseResultMap" type="com.nekosighed.pojo.model.Videos">
     <!--
-      WARNING - @mbg.generated
     -->
-    <result column="id" property="id" jdbcType="VARCHAR" />
-    <result column="user_id" property="userId" jdbcType="VARCHAR" />
-    <result column="audio_id" property="audioId" jdbcType="VARCHAR" />
-    <result column="video_desc" property="videoDesc" jdbcType="VARCHAR" />
-    <result column="video_path" property="videoPath" jdbcType="VARCHAR" />
-    <result column="video_seconds" property="videoSeconds" jdbcType="REAL" />
-    <result column="video_width" property="videoWidth" jdbcType="INTEGER" />
-    <result column="video_height" property="videoHeight" jdbcType="INTEGER" />
-    <result column="cover_path" property="coverPath" jdbcType="VARCHAR" />
-    <result column="like_counts" property="likeCounts" jdbcType="BIGINT" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <constructor>
+      <idArg column="id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="user_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="audio_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="video_desc" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="video_path" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="video_seconds" javaType="java.lang.Float" jdbcType="REAL" />
+      <arg column="video_width" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="video_height" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="cover_path" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="like_counts" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
   </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--
+    -->
+    delete from videos
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.nekosighed.pojo.model.Videos">
+    <!--
+    -->
+    insert into videos (id, user_id, audio_id, 
+      video_desc, video_path, video_seconds, 
+      video_width, video_height, cover_path, 
+      like_counts, status, create_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{audioId,jdbcType=VARCHAR}, 
+      #{videoDesc,jdbcType=VARCHAR}, #{videoPath,jdbcType=VARCHAR}, #{videoSeconds,jdbcType=REAL}, 
+      #{videoWidth,jdbcType=INTEGER}, #{videoHeight,jdbcType=INTEGER}, #{coverPath,jdbcType=VARCHAR}, 
+      #{likeCounts,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.nekosighed.pojo.model.Videos">
+    <!--
+    -->
+    update videos
+    set user_id = #{userId,jdbcType=VARCHAR},
+      audio_id = #{audioId,jdbcType=VARCHAR},
+      video_desc = #{videoDesc,jdbcType=VARCHAR},
+      video_path = #{videoPath,jdbcType=VARCHAR},
+      video_seconds = #{videoSeconds,jdbcType=REAL},
+      video_width = #{videoWidth,jdbcType=INTEGER},
+      video_height = #{videoHeight,jdbcType=INTEGER},
+      cover_path = #{coverPath,jdbcType=VARCHAR},
+      like_counts = #{likeCounts,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--
+    -->
+    select id, user_id, audio_id, video_desc, video_path, video_seconds, video_width, 
+    video_height, cover_path, like_counts, status, create_time
+    from videos
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    <!--
+    -->
+    select id, user_id, audio_id, video_desc, video_path, video_seconds, video_width, 
+    video_height, cover_path, like_counts, status, create_time
+    from videos
+  </select>
 </mapper>

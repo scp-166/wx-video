@@ -1,20 +1,27 @@
 package com.nekosighed.pojo.model;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
-@Table(name = "users_report")
-public class UsersReport {
+/**
+* @Description:
+* @Author: chf
+* @CreateDate: null
+*/
+public class UsersReport implements Serializable {
+    /**
+     * 
+     */
     private String id;
 
     /**
      * 被举报用户id
      */
-    @Column(name = "deal_user_id")
     private String dealUserId;
 
-    @Column(name = "deal_video_id")
+    /**
+     * 
+     */
     private String dealVideoId;
 
     /**
@@ -35,123 +42,89 @@ public class UsersReport {
     /**
      * 举报时间
      */
-    @Column(name = "create_date")
     private Date createDate;
 
     /**
-     * @return id
+     * users_report
      */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * @Description: 
+     * @Author: chf
+     * @CreateDate: 2019-09-07 13:23:25
+     */
+    public UsersReport(String id, String dealUserId, String dealVideoId, String title, String content, String userid, Date createDate) {
+        this.id = id;
+        this.dealUserId = dealUserId;
+        this.dealVideoId = dealVideoId;
+        this.title = title;
+        this.content = content;
+        this.userid = userid;
+        this.createDate = createDate;
+    }
+
+    /**
+     * @Description: 
+     * @Author: chf
+     * @CreateDate: 2019-09-07 13:23:25
+     */
+    public UsersReport() {
+        super();
+    }
+
     public String getId() {
         return id;
     }
 
-    /**
-     * @param id
-     */
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
-    /**
-     * 获取被举报用户id
-     *
-     * @return deal_user_id - 被举报用户id
-     */
     public String getDealUserId() {
         return dealUserId;
     }
 
-    /**
-     * 设置被举报用户id
-     *
-     * @param dealUserId 被举报用户id
-     */
     public void setDealUserId(String dealUserId) {
-        this.dealUserId = dealUserId;
+        this.dealUserId = dealUserId == null ? null : dealUserId.trim();
     }
 
-    /**
-     * @return deal_video_id
-     */
     public String getDealVideoId() {
         return dealVideoId;
     }
 
-    /**
-     * @param dealVideoId
-     */
     public void setDealVideoId(String dealVideoId) {
-        this.dealVideoId = dealVideoId;
+        this.dealVideoId = dealVideoId == null ? null : dealVideoId.trim();
     }
 
-    /**
-     * 获取类型标题，让用户选择，详情见 枚举
-     *
-     * @return title - 类型标题，让用户选择，详情见 枚举
-     */
     public String getTitle() {
         return title;
     }
 
-    /**
-     * 设置类型标题，让用户选择，详情见 枚举
-     *
-     * @param title 类型标题，让用户选择，详情见 枚举
-     */
     public void setTitle(String title) {
-        this.title = title;
+        this.title = title == null ? null : title.trim();
     }
 
-    /**
-     * 获取内容
-     *
-     * @return content - 内容
-     */
     public String getContent() {
         return content;
     }
 
-    /**
-     * 设置内容
-     *
-     * @param content 内容
-     */
     public void setContent(String content) {
-        this.content = content;
+        this.content = content == null ? null : content.trim();
     }
 
-    /**
-     * 获取举报人的id
-     *
-     * @return userid - 举报人的id
-     */
     public String getUserid() {
         return userid;
     }
 
-    /**
-     * 设置举报人的id
-     *
-     * @param userid 举报人的id
-     */
     public void setUserid(String userid) {
-        this.userid = userid;
+        this.userid = userid == null ? null : userid.trim();
     }
 
-    /**
-     * 获取举报时间
-     *
-     * @return create_date - 举报时间
-     */
     public Date getCreateDate() {
         return createDate;
     }
 
-    /**
-     * 设置举报时间
-     *
-     * @param createDate 举报时间
-     */
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }

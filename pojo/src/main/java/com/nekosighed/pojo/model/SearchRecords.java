@@ -1,9 +1,16 @@
 package com.nekosighed.pojo.model;
 
-import javax.persistence.Table;
+import java.io.Serializable;
 
-@Table(name = "search_records")
-public class SearchRecords {
+/**
+* @Description:
+* @Author: chf
+* @CreateDate: null
+*/
+public class SearchRecords implements Serializable {
+    /**
+     * 
+     */
     private String id;
 
     /**
@@ -12,34 +19,42 @@ public class SearchRecords {
     private String content;
 
     /**
-     * @return id
+     * search_records
      */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * @Description: 
+     * @Author: chf
+     * @CreateDate: 2019-09-07 13:23:25
+     */
+    public SearchRecords(String id, String content) {
+        this.id = id;
+        this.content = content;
+    }
+
+    /**
+     * @Description: 
+     * @Author: chf
+     * @CreateDate: 2019-09-07 13:23:25
+     */
+    public SearchRecords() {
+        super();
+    }
+
     public String getId() {
         return id;
     }
 
-    /**
-     * @param id
-     */
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
-    /**
-     * 获取搜索的内容
-     *
-     * @return content - 搜索的内容
-     */
     public String getContent() {
         return content;
     }
 
-    /**
-     * 设置搜索的内容
-     *
-     * @param content 搜索的内容
-     */
     public void setContent(String content) {
-        this.content = content;
+        this.content = content == null ? null : content.trim();
     }
 }

@@ -9,11 +9,6 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml  # mapper的xml文件位置, classpath介绍:  https://blog.csdn.net/mrl6140x/article/details/78077942
 #  config-location: classpath:mybatis/mybatis-config.xml  # 属性映射 https://coding.imooc.com/lesson/217.html#mid=14256
 
-# 通用 mapper 配置
-mapper:
-  mappers: com.nekosighed.common.utils.MyMapper # 配置项，这里用到了 common 模块的 com.nekosighed.common.utils.MyMapper.class
-  not-empty: false
-  identity: MYSQL
 
 # 分页插件配置
 pageHelper:
@@ -21,6 +16,13 @@ pageHelper:
   params: count=countSql
   helper-dialect: mysql
   reasonable: true
+
+# 要放在 pageHelper 后面，避免出现 nested exception is org.apache.ibatis.builder.BuilderException: Error invoking SqlProvider method
+# 通用 mapper 配置
+#mapper:
+#  mappers: com.nekosighed.common.utils.MyMapper # 配置项，这里用到了 common 模块的 com.nekosighed.common.utils.MyMapper.class
+#  not-empty: false
+#  identity: MYSQL
 
 logging:
   level:

@@ -1,24 +1,23 @@
 package com.nekosighed.pojo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@ToString
-public class Users {
+/**
+* @Description:
+* @Author: chf
+* @CreateDate: null
+*/
+public class Users implements Serializable {
+    /**
+     * 
+     */
     private String id;
 
     /**
      * 用户名
      */
-    @NotNull(message = "用户名不能为空")
+    @NotNull(message = "用户账号不能为空")
     private String username;
 
     /**
@@ -30,7 +29,6 @@ public class Users {
     /**
      * 我的头像，如果没有默认给一张
      */
-    @Column(name = "face_image")
     private String faceImage;
 
     /**
@@ -41,157 +39,108 @@ public class Users {
     /**
      * 我的粉丝数量
      */
-    @Column(name = "fans_counts")
     private Integer fansCounts;
 
     /**
      * 我关注的人总数
      */
-    @Column(name = "follow_counts")
     private Integer followCounts;
 
     /**
      * 我接受到的赞美/收藏 的数量
      */
-    @Column(name = "receive_like_counts")
     private Integer receiveLikeCounts;
 
     /**
-     * @return id
+     * users
      */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * @Description: 
+     * @Author: chf
+     * @CreateDate: 2019-09-07 13:23:25
+     */
+    public Users(String id, String username, String password, String faceImage, String nickname, Integer fansCounts, Integer followCounts, Integer receiveLikeCounts) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.faceImage = faceImage;
+        this.nickname = nickname;
+        this.fansCounts = fansCounts;
+        this.followCounts = followCounts;
+        this.receiveLikeCounts = receiveLikeCounts;
+    }
+
+    /**
+     * @Description: 
+     * @Author: chf
+     * @CreateDate: 2019-09-07 13:23:25
+     */
+    public Users() {
+        super();
+    }
+
     public String getId() {
         return id;
     }
 
-    /**
-     * @param id
-     */
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
-    /**
-     * 获取用户名
-     *
-     * @return username - 用户名
-     */
     public String getUsername() {
         return username;
     }
 
-    /**
-     * 设置用户名
-     *
-     * @param username 用户名
-     */
     public void setUsername(String username) {
-        this.username = username;
+        this.username = username == null ? null : username.trim();
     }
 
-    /**
-     * 获取密码
-     *
-     * @return password - 密码
-     */
     public String getPassword() {
         return password;
     }
 
-    /**
-     * 设置密码
-     *
-     * @param password 密码
-     */
     public void setPassword(String password) {
-        this.password = password;
+        this.password = password == null ? null : password.trim();
     }
 
-    /**
-     * 获取我的头像，如果没有默认给一张
-     *
-     * @return face_image - 我的头像，如果没有默认给一张
-     */
     public String getFaceImage() {
         return faceImage;
     }
 
-    /**
-     * 设置我的头像，如果没有默认给一张
-     *
-     * @param faceImage 我的头像，如果没有默认给一张
-     */
     public void setFaceImage(String faceImage) {
-        this.faceImage = faceImage;
+        this.faceImage = faceImage == null ? null : faceImage.trim();
     }
 
-    /**
-     * 获取昵称
-     *
-     * @return nickname - 昵称
-     */
     public String getNickname() {
         return nickname;
     }
 
-    /**
-     * 设置昵称
-     *
-     * @param nickname 昵称
-     */
     public void setNickname(String nickname) {
-        this.nickname = nickname;
+        this.nickname = nickname == null ? null : nickname.trim();
     }
 
-    /**
-     * 获取我的粉丝数量
-     *
-     * @return fans_counts - 我的粉丝数量
-     */
     public Integer getFansCounts() {
         return fansCounts;
     }
 
-    /**
-     * 设置我的粉丝数量
-     *
-     * @param fansCounts 我的粉丝数量
-     */
     public void setFansCounts(Integer fansCounts) {
         this.fansCounts = fansCounts;
     }
 
-    /**
-     * 获取我关注的人总数
-     *
-     * @return follow_counts - 我关注的人总数
-     */
     public Integer getFollowCounts() {
         return followCounts;
     }
 
-    /**
-     * 设置我关注的人总数
-     *
-     * @param followCounts 我关注的人总数
-     */
     public void setFollowCounts(Integer followCounts) {
         this.followCounts = followCounts;
     }
 
-    /**
-     * 获取我接受到的赞美/收藏 的数量
-     *
-     * @return receive_like_counts - 我接受到的赞美/收藏 的数量
-     */
     public Integer getReceiveLikeCounts() {
         return receiveLikeCounts;
     }
 
-    /**
-     * 设置我接受到的赞美/收藏 的数量
-     *
-     * @param receiveLikeCounts 我接受到的赞美/收藏 的数量
-     */
     public void setReceiveLikeCounts(Integer receiveLikeCounts) {
         this.receiveLikeCounts = receiveLikeCounts;
     }

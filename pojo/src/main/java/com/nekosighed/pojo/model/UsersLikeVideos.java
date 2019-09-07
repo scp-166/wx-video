@@ -1,71 +1,74 @@
 package com.nekosighed.pojo.model;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
+import java.io.Serializable;
 
-@Table(name = "users_like_videos")
-public class UsersLikeVideos {
+/**
+* @Description:
+* @Author: chf
+* @CreateDate: null
+*/
+public class UsersLikeVideos implements Serializable {
+    /**
+     * 
+     */
     private String id;
 
     /**
      * 用户
      */
-    @Column(name = "user_id")
     private String userId;
 
     /**
      * 视频
      */
-    @Column(name = "video_id")
     private String videoId;
 
     /**
-     * @return id
+     * users_like_videos
      */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * @Description: 
+     * @Author: chf
+     * @CreateDate: 2019-09-07 13:23:25
+     */
+    public UsersLikeVideos(String id, String userId, String videoId) {
+        this.id = id;
+        this.userId = userId;
+        this.videoId = videoId;
+    }
+
+    /**
+     * @Description: 
+     * @Author: chf
+     * @CreateDate: 2019-09-07 13:23:25
+     */
+    public UsersLikeVideos() {
+        super();
+    }
+
     public String getId() {
         return id;
     }
 
-    /**
-     * @param id
-     */
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
-    /**
-     * 获取用户
-     *
-     * @return user_id - 用户
-     */
     public String getUserId() {
         return userId;
     }
 
-    /**
-     * 设置用户
-     *
-     * @param userId 用户
-     */
     public void setUserId(String userId) {
-        this.userId = userId;
+        this.userId = userId == null ? null : userId.trim();
     }
 
-    /**
-     * 获取视频
-     *
-     * @return video_id - 视频
-     */
     public String getVideoId() {
         return videoId;
     }
 
-    /**
-     * 设置视频
-     *
-     * @param videoId 视频
-     */
     public void setVideoId(String videoId) {
-        this.videoId = videoId;
+        this.videoId = videoId == null ? null : videoId.trim();
     }
 }
