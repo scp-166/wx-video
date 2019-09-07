@@ -3,6 +3,8 @@ package com.nekosighed.common.utils;
 import com.nekosighed.common.comonenum.BusinessErrorEnum;
 import com.nekosighed.common.comonenum.NormalErrorEnum;
 import com.nekosighed.common.comonenum.SimpleEnum;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ import java.util.Map;
  * 555：异常抛出信息
  */
 
+@ApiModel(value = "返回值", description = "返回值描述")
 @Getter
 @Setter
 public class JsonResult extends ResponseEntity {
@@ -31,16 +34,19 @@ public class JsonResult extends ResponseEntity {
     /**
      * 响应业务状态
      */
+    @ApiModelProperty(value = "业务状态", name = "status", example = "200")
     private Integer status;
 
     /**
      * 响应消息
      */
+    @ApiModelProperty(value = "响应消息", name = "msg", example = "")
     private String msg;
 
     /**
      * 响应数据
      */
+    @ApiModelProperty(value = "响应数据", name = "data", example = "")
     private Object data;
 
     /**

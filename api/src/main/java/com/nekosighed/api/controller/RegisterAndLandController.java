@@ -5,6 +5,8 @@ import com.nekosighed.common.utils.JsonResult;
 import com.nekosighed.common.utils.MD5Utils;
 import com.nekosighed.pojo.model.Users;
 import com.nekosighed.service.imp.UsersServiceImp;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 
+@Api(tags = "小程序", description = "总体接口")
 @Validated
 @RestController
 public class RegisterAndLandController {
@@ -25,6 +28,7 @@ public class RegisterAndLandController {
     @Resource
     private UsersServiceImp serviceImp;
 
+    @ApiOperation(value = "注册接口", tags = "小程序交互")
     @PostMapping(value = "register", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonResult register(@Validated  @RequestBody Users users) throws Exception{
         // 1. 判断不为空，利用 Validation
