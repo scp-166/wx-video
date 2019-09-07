@@ -1,33 +1,33 @@
 package com.nekosighed.api.controller;
 
 import com.nekosighed.common.comonenum.BusinessErrorEnum;
-import com.nekosighed.common.comonenum.ConstantEnum;
 import com.nekosighed.common.utils.JsonResult;
 import com.nekosighed.common.utils.MD5Utils;
-import com.nekosighed.common.utils.UuidUtils;
 import com.nekosighed.pojo.Vo.UsersVo;
 import com.nekosighed.pojo.model.Users;
 import com.nekosighed.service.imp.UsersServiceImp;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 @Api(tags = "小程序", description = "总体接口")
 @Validated
 @RestController
-public class RegisterAndLandController extends BaseController{
+public class UsersAccountOperationController extends BaseController{
 
-    private static final Logger logger = LoggerFactory.getLogger(RegisterAndLandController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UsersAccountOperationController.class);
 
     @Resource
     private UsersServiceImp serviceImp;
@@ -76,6 +76,14 @@ public class RegisterAndLandController extends BaseController{
         } else {
             return JsonResult.detailResponse(BusinessErrorEnum.PASSWORD_ERROR);
         }
+    }
 
+    @ApiOperation(value = "注销接口", tags = "小程序交互")
+    @ApiImplicitParam(value = "用户id", name = "userId", required = true, paramType = "query", dataType = "String")
+    @PostMapping(value = "/logout")
+    public JsonResult logout(@Validated @NotNull(message = "用户id不能为空") @RequestParam String userId){
+        // 删除 redis session
+        delRedisSessionForUsers(userId);
+        return JsonResult.success("注销成功");
     }
 }

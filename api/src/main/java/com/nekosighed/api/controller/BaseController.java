@@ -37,4 +37,13 @@ public class BaseController {
         usersVo.setUuidToken(uuid);
         return usersVo;
     }
+
+    /**
+     * 根据 userId 删除 redis session
+     *
+     * @param userId
+     */
+    void delRedisSessionForUsers(String userId) {
+        redisUtils.del(REDIS_SESSION_PREFIX + ":" + userId);
+    }
 }

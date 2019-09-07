@@ -5,6 +5,7 @@ import com.nekosighed.common.utils.JsonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -13,12 +14,38 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
 @ControllerAdvice
 public class BadRequestNotifier {
     private static final Logger logger = LoggerFactory.getLogger(BadRequestNotifier.class);
+
+    /**
+     * RequestParam 注释了 表单类，验证失败会抛出该异常
+     * @param exception
+     * @return
+     */
+    @ExceptionHandler(BindException.class)
+    public JsonResult bindException(BindException exception){
+        logger.warn("表单验证失败");
+        return getJsonResult(exception.getBindingResult());
+    }
+
+    /**
+     * RequestParam 注释的 单参数验证失败会进入该异常
+     *  query param
+     * @param exception
+     * @return
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public JsonResult constraintViolationException(ConstraintViolationException exception){
+        logger.warn("单表单参数验证失败");
+        return JsonResult.error("参数违反约束： " + exception.getLocalizedMessage());
+    }
+
 
     /**
      * RequestBody 验证失败
@@ -58,7 +85,7 @@ public class BadRequestNotifier {
         logger.info(exception.getMessage());
         logger.info(exception.getParameterName());
         logger.info(exception.getParameterType());
-        return JsonResult.error("缺少参数: " + exception.getParameterName() + "类型为: " + exception.getParameterType());
+        return JsonResult.error("缺少参数: " + exception.getParameterName() + ", 要求类型为: " + exception.getParameterType());
     }
 
     /**
