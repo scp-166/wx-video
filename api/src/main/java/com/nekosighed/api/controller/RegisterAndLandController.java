@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
+import java.util.Optional;
 
 @Api(tags = "小程序", description = "总体接口")
 @Validated
@@ -29,11 +29,11 @@ public class RegisterAndLandController {
     private UsersServiceImp serviceImp;
 
     @ApiOperation(value = "注册接口", tags = "小程序交互")
-    @PostMapping(value = "register", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public JsonResult register(@Validated  @RequestBody Users users) throws Exception{
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public JsonResult register(@Validated @RequestBody Users users) throws Exception {
         // 1. 判断不为空，利用 Validation
         // 2. 用户是否存在
-        if (serviceImp.queryUserInfoByUserName(users.getUsername())){
+        if (serviceImp.queryUserInfoByUserName(users.getUsername())) {
             return JsonResult.detailResponse(BusinessErrorEnum.USERS_ALREADY_EXIST);
         }
         // 3. 进行注册
@@ -45,6 +45,29 @@ public class RegisterAndLandController {
         users.setReceiveLikeCounts(0);
 
         serviceImp.saveUser(users);
-        return JsonResult.success("注册成功");
+
+        // 清空密码
+        users.setPassword("");
+        // 返回注册信息
+        return JsonResult.success("注册成功", users);
+    }
+
+    @ApiOperation(value = "登录接口", tags = "小程序交互")
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public JsonResult login(@Validated @RequestBody Users users) throws Exception {
+        // 1. 用户是否存在
+        if (serviceImp.isUserNotExistByUserName(users.getUsername())) {
+            return JsonResult.detailResponse(BusinessErrorEnum.USERS_NOT_FOUND);
+        }
+        // 2. 校验密码
+        Users targetUser = serviceImp.getDetailUserInfoByUserName(users.getUsername());
+        if (Optional.ofNullable(targetUser.getPassword()).orElse("").equals(MD5Utils.getMD5Str(users.getPassword()))) {
+            // 返回信息
+            targetUser.setPassword("");
+            return JsonResult.success("登录成功", targetUser);
+        } else {
+            return JsonResult.detailResponse(BusinessErrorEnum.PASSWORD_ERROR);
+        }
+
     }
 }

@@ -44,4 +44,23 @@ public class UsersServiceImp implements UsersService {
     public boolean isUserExistByUserName(String username){
         return queryUserInfoByUserName(username);
     }
+
+    /**
+     * 通过 username 判断用户是否不存在
+     * @param username
+     * @return
+     */
+    public boolean isUserNotExistByUserName(String username){
+        return !queryUserInfoByUserName(username);
+    }
+
+    /**
+     * 通过 username 获得用户信息
+     *
+     * @param username
+     * @return
+     */
+    public Users getDetailUserInfoByUserName(String username){
+        return usersMapper.selectByUsername(username);
+    }
 }

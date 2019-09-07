@@ -1,4 +1,5 @@
 import com.nekosighed.ApplicationStart;
+import com.nekosighed.pojo.model.Users;
 import com.nekosighed.service.UsersService;
 import com.nekosighed.service.imp.UsersServiceImp;
 import org.junit.Test;
@@ -15,8 +16,7 @@ public class TestApi {
 
     @Test
     public void testDemo(){
-        System.out.println(usersService.queryUserInfoByUserName("a"));
+        System.out.println(new Users());
 
-        System.out.println(usersService.queryUserInfoByUserName("abc"));
     }
 }

@@ -2,6 +2,7 @@ package com.nekosighed.pojo.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 * @Author: chf
 * @CreateDate: null
 */
+@ToString
 @ApiModel(value = "用户实体", description = "用户信息")
 public class Users implements Serializable {
     /**
@@ -29,7 +31,7 @@ public class Users implements Serializable {
     /**
      * 密码
      */
-    @ApiModelProperty(value = "密码", name = "password", example = "111111", required = true)
+    @ApiModelProperty(value = "密码", name = "password", example = "abcabc", required = true)
     @NotNull(message = "密码不能为空")
     private String password;
 
