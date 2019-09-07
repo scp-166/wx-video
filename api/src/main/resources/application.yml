@@ -39,9 +39,14 @@ spring:
 
   datasource:
     # 数据源
-    # &allowMultiQueries=true  允许<delete>中多条删除
-    url: jdbc:mysql://www.nekosighed.com:3306/video
-#    ?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowMultiQueries=true
+    # useSSL=false: 不适用 ssl 连接
+    # useUnicode=true : 使用使用 unicode 字符集
+    # characterEncoding=UTF-8 : 指定字符集，此处使用 utf-8
+    # autoReconnect=true :  当数据库连接异常中断时，自动重新连接
+    # allowMultiQueries=true  允许<delete>中多条删除
+    # failOverReadOnly : 自动重连成功后，连接不设置为只读
+    # 其他介绍 https://www.cnblogs.com/mracale/p/5842572.html
+    url: jdbc:mysql://www.nekosighed.com:3306/video?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowMultiQueries=true&failOverReadOnly=false
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: lyl591300.
