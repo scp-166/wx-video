@@ -30,9 +30,10 @@ public class UsersServiceImp implements UsersService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public void saveUser(Users users) {
+    public Users saveUser(Users users) {
         users.setId(UuidUtils.createUUID());
         usersMapper.insert(users);
+        return users;
     }
 
     /**
@@ -60,6 +61,7 @@ public class UsersServiceImp implements UsersService {
      * @param username
      * @return
      */
+    @Transactional(propagation = Propagation.SUPPORTS)
     public Users getDetailUserInfoByUserName(String username){
         return usersMapper.selectByUsername(username);
     }

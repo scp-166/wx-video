@@ -8,7 +8,7 @@ public interface UsersService {
 
     boolean queryUserInfoByUserName(String username);
 
-    void saveUser(Users users);
+    Users saveUser(Users users);
 
 
 }

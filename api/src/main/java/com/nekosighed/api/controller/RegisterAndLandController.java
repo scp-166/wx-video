@@ -1,14 +1,18 @@
 package com.nekosighed.api.controller;
 
 import com.nekosighed.common.comonenum.BusinessErrorEnum;
+import com.nekosighed.common.comonenum.ConstantEnum;
 import com.nekosighed.common.utils.JsonResult;
 import com.nekosighed.common.utils.MD5Utils;
+import com.nekosighed.common.utils.UuidUtils;
+import com.nekosighed.pojo.Vo.UsersVo;
 import com.nekosighed.pojo.model.Users;
 import com.nekosighed.service.imp.UsersServiceImp;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +25,7 @@ import java.util.Optional;
 @Api(tags = "小程序", description = "总体接口")
 @Validated
 @RestController
-public class RegisterAndLandController {
+public class RegisterAndLandController extends BaseController{
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterAndLandController.class);
 
@@ -44,10 +48,12 @@ public class RegisterAndLandController {
         users.setFollowCounts(0);
         users.setReceiveLikeCounts(0);
 
-        serviceImp.saveUser(users);
+        users = serviceImp.saveUser(users);
+
+        UsersVo usersVo = setRedisSessionForUsers(users);
 
         // 清空密码
-        users.setPassword("");
+        usersVo.setPassword("");
         // 返回注册信息
         return JsonResult.success("注册成功", users);
     }
@@ -62,9 +68,11 @@ public class RegisterAndLandController {
         // 2. 校验密码
         Users targetUser = serviceImp.getDetailUserInfoByUserName(users.getUsername());
         if (Optional.ofNullable(targetUser.getPassword()).orElse("").equals(MD5Utils.getMD5Str(users.getPassword()))) {
-            // 返回信息
-            targetUser.setPassword("");
-            return JsonResult.success("登录成功", targetUser);
+            // 设置 redis session
+            UsersVo usersVo = setRedisSessionForUsers(targetUser);
+            // 返回用户信息
+            usersVo.setPassword("");
+            return JsonResult.success("登录成功", usersVo);
         } else {
             return JsonResult.detailResponse(BusinessErrorEnum.PASSWORD_ERROR);
         }
