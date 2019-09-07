@@ -1,6 +1,6 @@
 package com.nekosighed.api.notifier;
 
-import com.nekosighed.common.comonenum.ErrorEnum;
+import com.nekosighed.common.comonenum.NormalErrorEnum;
 import com.nekosighed.common.utils.JsonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,7 @@ public class BadRequestNotifier {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public JsonResult httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException exception) {
         logger.info("接口要求的方法是: {}", exception.getSupportedMediaTypes().toString());
-        return JsonResult.error(ErrorEnum.HTTP_MEDIA_TYPE_NOT_SUPPORT.getMsg());
+        return JsonResult.error(NormalErrorEnum.HTTP_MEDIA_TYPE_NOT_SUPPORT.getMsg());
     }
 
     /**
@@ -73,8 +73,8 @@ public class BadRequestNotifier {
         if (Optional.ofNullable(exception.getMessage()).isPresent()) {
 
             return exception.getMessage().startsWith("Required request body is missing") ?
-                    JsonResult.error(ErrorEnum.JSON_PARSING_ERROR.getMsg()) :
-                    JsonResult.error(ErrorEnum.OTHER_PARSING_ERROR.getMsg());
+                    JsonResult.error(NormalErrorEnum.JSON_PARSING_ERROR.getMsg()) :
+                    JsonResult.error(NormalErrorEnum.OTHER_PARSING_ERROR.getMsg());
         }
         return JsonResult.error();
     }
@@ -104,7 +104,7 @@ public class BadRequestNotifier {
             });
             return JsonResult.error(errorBuffer.toString());
         } else {
-            return JsonResult.error(ErrorEnum.UNKNOWN_ERROR.getMsg());
+            return JsonResult.error(NormalErrorEnum.UNKNOWN_ERROR.getMsg());
         }
     }
 }

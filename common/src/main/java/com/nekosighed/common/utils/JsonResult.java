@@ -1,13 +1,13 @@
 package com.nekosighed.common.utils;
 
-import com.nekosighed.common.comonenum.ErrorEnum;
+import com.nekosighed.common.comonenum.BusinessErrorEnum;
+import com.nekosighed.common.comonenum.NormalErrorEnum;
 import com.nekosighed.common.comonenum.SimpleEnum;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
-import org.springframework.validation.ObjectError;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,6 +70,10 @@ public class JsonResult extends ResponseEntity {
         return success("", "");
     }
 
+    public static JsonResult success(String msg) {
+        return success(msg, "");
+    }
+
     public static JsonResult success(String msg, Object data) {
         return new JsonResult(fillData(SimpleEnum.RESPONSE_SUCCESS.getNum(), msg, data), HttpStatus.OK);
     }
@@ -80,7 +84,7 @@ public class JsonResult extends ResponseEntity {
      * @return JsonResult
      */
     public static JsonResult error() {
-        return error(ErrorEnum.UNKNOWN_ERROR.getMsg(), "");
+        return error(NormalErrorEnum.UNKNOWN_ERROR.getMsg(), "");
     }
 
     public static JsonResult error(String msg) {
@@ -89,6 +93,25 @@ public class JsonResult extends ResponseEntity {
 
     public static JsonResult error(String msg, Object data) {
         return new JsonResult(fillData(SimpleEnum.RESPONSE_ERROR.getNum(), msg, data), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * 具体错误响应
+     *
+     * @param msg
+     * @param data
+     * @return
+     */
+    public static JsonResult detailResponse(String msg, Object data){
+        return detailResponse(BusinessErrorEnum.INTERNAL_BUSINESS_ERROR, msg, data);
+    }
+
+    public static JsonResult detailResponse(BusinessErrorEnum errorEnum){
+        return detailResponse(errorEnum, errorEnum.getMsg(), "");
+    }
+
+    public static JsonResult detailResponse(BusinessErrorEnum errorEnum, String msg, Object data){
+        return new JsonResult(fillData(errorEnum.getNum(), msg, data), HttpStatus.OK);
     }
 
 

@@ -59,4 +59,10 @@
     receive_like_counts
     from users
   </select>
+
+  <select id="selectByUsername" resultType="com.nekosighed.pojo.model.Users">
+    select * from users
+    where username = #{username, jdbcType=VARCHAR}
+    limit 1
+  </select>
 </mapper>
