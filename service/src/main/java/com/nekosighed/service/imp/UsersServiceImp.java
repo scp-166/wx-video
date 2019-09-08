@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,9 +24,8 @@ public class UsersServiceImp implements UsersService {
      */
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public boolean queryUserInfoByUserName(String username) {
-        Users result = usersMapper.selectByUsername(username);
-        return result != null;
+    public Users queryUserInfoByUserName(String username) {
+        return usersMapper.selectByUsername(username);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -42,8 +42,9 @@ public class UsersServiceImp implements UsersService {
      * @param username
      * @return 存在为 true
      */
+    @Override
     public boolean isUserExistByUserName(String username){
-        return queryUserInfoByUserName(username);
+        return queryUserInfoByUserName(username) != null;
     }
 
     /**
@@ -51,18 +52,33 @@ public class UsersServiceImp implements UsersService {
      * @param username
      * @return
      */
+    @Override
     public boolean isUserNotExistByUserName(String username){
-        return !queryUserInfoByUserName(username);
+        return queryUserInfoByUserName(username) == null;
     }
 
     /**
-     * 通过 username 获得用户信息
-     *
-     * @param username
+     * 根据 用户 id 查询用户信息
+     * @param userId
      * @return
      */
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public Users getDetailUserInfoByUserName(String username){
-        return usersMapper.selectByUsername(username);
+    @Override
+    public Users queryUserInfoByUserId(String userId) {
+        return usersMapper.selectByPrimaryKey(userId);
+    }
+
+    /**
+     * 更新 头像信息
+     * @param users
+     */
+    @Override
+    public void upLoadFaceImg(Users users) {
+        Optional optional = Optional.ofNullable(queryUserInfoByUserId(users.getId()));
+        if (optional.isPresent()){
+            Users sourceUser = (Users)(optional.get());
+            // 保存 头像
+            sourceUser.setFaceImage(users.getFaceImage());
+            usersMapper.updateByPrimaryKey(sourceUser);
+        }
     }
 }

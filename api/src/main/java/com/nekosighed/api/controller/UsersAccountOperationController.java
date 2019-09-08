@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
-@Api(tags = "小程序", description = "总体接口")
+@Api(tags = "小程序账号操作", description = "小程序交互①")
 @Validated
 @RestController
 public class UsersAccountOperationController extends BaseController{
@@ -32,12 +32,12 @@ public class UsersAccountOperationController extends BaseController{
     @Resource
     private UsersServiceImp serviceImp;
 
-    @ApiOperation(value = "注册接口", tags = "小程序交互")
+    @ApiOperation(value = "注册接口")
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonResult register(@Validated @RequestBody Users users) throws Exception {
         // 1. 判断不为空，利用 Validation
         // 2. 用户是否存在
-        if (serviceImp.queryUserInfoByUserName(users.getUsername())) {
+        if (serviceImp.isUserExistByUserName(users.getUsername())) {
             return JsonResult.detailResponse(BusinessErrorEnum.USERS_ALREADY_EXIST);
         }
         // 3. 进行注册
@@ -58,7 +58,7 @@ public class UsersAccountOperationController extends BaseController{
         return JsonResult.success("注册成功", users);
     }
 
-    @ApiOperation(value = "登录接口", tags = "小程序交互")
+    @ApiOperation(value = "登录接口")
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public JsonResult login(@Validated @RequestBody Users users) throws Exception {
         // 1. 用户是否存在
@@ -66,7 +66,7 @@ public class UsersAccountOperationController extends BaseController{
             return JsonResult.detailResponse(BusinessErrorEnum.USERS_NOT_FOUND);
         }
         // 2. 校验密码
-        Users targetUser = serviceImp.getDetailUserInfoByUserName(users.getUsername());
+        Users targetUser = serviceImp.queryUserInfoByUserName(users.getUsername());
         if (Optional.ofNullable(targetUser.getPassword()).orElse("").equals(MD5Utils.getMD5Str(users.getPassword()))) {
             // 设置 redis session
             UsersVo usersVo = setRedisSessionForUsers(targetUser);
@@ -78,7 +78,7 @@ public class UsersAccountOperationController extends BaseController{
         }
     }
 
-    @ApiOperation(value = "注销接口", tags = "小程序交互")
+    @ApiOperation(value = "注销接口")
     @ApiImplicitParam(value = "用户id", name = "userId", required = true, paramType = "query", dataType = "String")
     @PostMapping(value = "/logout")
     public JsonResult logout(@Validated @NotNull(message = "用户id不能为空") @RequestParam String userId){
