@@ -3,19 +3,19 @@ package com.nekosighed.api.controller;
 
 import com.nekosighed.common.comonenum.BusinessErrorEnum;
 import com.nekosighed.common.utils.JsonResult;
+import com.nekosighed.pojo.Vo.UsersVo;
 import com.nekosighed.pojo.model.Users;
 import com.nekosighed.service.imp.UsersServiceImp;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -71,5 +71,22 @@ public class UsersOperationController extends BaseController {
             return JsonResult.detailResponse(BusinessErrorEnum.FILE_OPERATION_ERROR);
         }
 
+    }
+
+    /**
+     * 获取用户信息
+     * @param userId
+     * @return
+     */
+    @ApiImplicitParam(value = "用户id", name = "userId", required = true, dataType = "String", paramType = "query")
+    @GetMapping("/userInfo")
+    public JsonResult getUserInfo(@Validated @NotNull @RequestParam String userId){
+        Users users = serviceImp.queryUserInfoByUserId(userId);
+        if (users == null){
+            return JsonResult.detailResponse(BusinessErrorEnum.USERS_NOT_FOUND);
+        }
+        UsersVo usersVo = new UsersVo();
+        BeanUtils.copyProperties(users, usersVo);
+        return JsonResult.success("获取成功", usersVo);
     }
 }

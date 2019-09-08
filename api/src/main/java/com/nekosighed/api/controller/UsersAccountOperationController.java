@@ -50,10 +50,10 @@ public class UsersAccountOperationController extends BaseController{
 
         users = serviceImp.saveUser(users);
 
-        UsersVo usersVo = setRedisSessionForUsers(users);
+        setRedisSessionForUsers(users);
 
-        // 清空密码
-        usersVo.setPassword("");
+        // 清空密码:  UsersVo中的password 添加了 @JsonIgnore，无需显式清空
+
         // 返回注册信息
         return JsonResult.success("注册成功", users);
     }
@@ -70,8 +70,8 @@ public class UsersAccountOperationController extends BaseController{
         if (Optional.ofNullable(targetUser.getPassword()).orElse("").equals(MD5Utils.getMD5Str(users.getPassword()))) {
             // 设置 redis session
             UsersVo usersVo = setRedisSessionForUsers(targetUser);
-            // 返回用户信息
-            usersVo.setPassword("");
+            // 清空密码:  UsersVo中的password 添加了 @JsonIgnore，无需显式清空
+            // 返回 用户信息
             return JsonResult.success("登录成功", usersVo);
         } else {
             return JsonResult.detailResponse(BusinessErrorEnum.PASSWORD_ERROR);
