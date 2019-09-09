@@ -69,6 +69,7 @@ public class BadRequestNotifier {
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public JsonResult httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException exception) {
+        exception.printStackTrace();
         logger.info("接口要求的方法是: {}", exception.getSupportedMediaTypes().toString());
         return JsonResult.error(NormalErrorEnum.HTTP_MEDIA_TYPE_NOT_SUPPORT.getMsg());
     }

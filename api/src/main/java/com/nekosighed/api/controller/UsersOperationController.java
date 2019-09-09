@@ -43,17 +43,17 @@ public class UsersOperationController extends BaseController {
         String parentDir = "E:/wx_video";
         String secondDir = "/" + userId + "/face/";
 
-        File OutPutFile = new File(parentDir + secondDir);
+        File outPutFile = new File(parentDir + secondDir);
         // 要求是目录
-        if (!OutPutFile.isDirectory()) {
-            OutPutFile.mkdirs();
+        if (!outPutFile.isDirectory()) {
+            outPutFile.mkdirs();
         }
 
         // 真正的文件
-        OutPutFile = new File(OutPutFile, file.getOriginalFilename());
+        outPutFile = new File(outPutFile, file.getOriginalFilename());
 
 
-        try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(OutPutFile));
+        try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outPutFile));
              BufferedInputStream inputStream = new BufferedInputStream(file.getInputStream())) {
             // 拷贝文件
             IOUtils.copy(inputStream, outputStream);
