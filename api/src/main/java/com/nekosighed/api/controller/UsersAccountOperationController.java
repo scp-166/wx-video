@@ -5,7 +5,7 @@ import com.nekosighed.common.utils.JsonResult;
 import com.nekosighed.common.utils.MD5Utils;
 import com.nekosighed.pojo.Vo.UsersVo;
 import com.nekosighed.pojo.model.Users;
-import com.nekosighed.service.imp.UsersServiceImp;
+import com.nekosighed.service.imp.UsersServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +30,7 @@ public class UsersAccountOperationController extends BaseController{
     private static final Logger logger = LoggerFactory.getLogger(UsersAccountOperationController.class);
 
     @Resource
-    private UsersServiceImp serviceImp;
+    private UsersServiceImpl serviceImp;
 
     @ApiOperation(value = "注册接口")
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)

@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UsersServiceImp implements UsersService {
+public class UsersServiceImpl implements UsersService {
     @Autowired
     private UsersMapper usersMapper;
 

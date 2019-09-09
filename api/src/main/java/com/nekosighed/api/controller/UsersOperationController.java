@@ -5,7 +5,7 @@ import com.nekosighed.common.comonenum.BusinessErrorEnum;
 import com.nekosighed.common.utils.JsonResult;
 import com.nekosighed.pojo.Vo.UsersVo;
 import com.nekosighed.pojo.model.Users;
-import com.nekosighed.service.imp.UsersServiceImp;
+import com.nekosighed.service.imp.UsersServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +30,7 @@ public class UsersOperationController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(UsersOperationController.class);
 
     @Resource
-    UsersServiceImp serviceImp;
+    UsersServiceImpl serviceImp;
 
     @ApiOperation(value = "用户上传头像接口")
     @PostMapping(value = "/uploadFace", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})

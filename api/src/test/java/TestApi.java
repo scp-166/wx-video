@@ -1,7 +1,6 @@
 import com.nekosighed.ApplicationStart;
 import com.nekosighed.pojo.model.Users;
-import com.nekosighed.service.UsersService;
-import com.nekosighed.service.imp.UsersServiceImp;
+import com.nekosighed.service.imp.UsersServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = ApplicationStart.class)
 public class TestApi {
     @Autowired
-    UsersServiceImp usersService;
+    UsersServiceImpl usersService;
 
     @Test
     public void testDemo(){
