@@ -1,5 +1,7 @@
 package com.nekosighed.pojo.model;
 
+import lombok.ToString;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -8,6 +10,7 @@ import java.util.Date;
 * @Author: chf
 * @CreateDate: null
 */
+@ToString
 public class Videos implements Serializable {
     /**
      * 
@@ -60,7 +63,9 @@ public class Videos implements Serializable {
     private Long likeCounts;
 
     /**
-     * 视频状态： 1、发布成功 2、禁止播放，管理员操作
+     * 视频状态：
+ 1、发布成功
+ 2、禁止播放，管理员操作
      */
     private Integer status;
 

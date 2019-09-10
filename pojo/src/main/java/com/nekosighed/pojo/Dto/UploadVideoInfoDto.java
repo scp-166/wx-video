@@ -31,7 +31,7 @@ public class UploadVideoInfoDto {
      */
     @ApiModelProperty(value = "视频时长", name = "videoSeconds", example = "40.1", required = true)
     @NotNull(message = "视频时长不能为空")
-    private double videoSeconds;
+    private Float videoSeconds;
 
     /**
      * 视频长度

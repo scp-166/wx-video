@@ -29,14 +29,33 @@
     <!--
     -->
     insert into videos (id, user_id, audio_id, 
-      video_desc, video_path, video_seconds, 
-      video_width, video_height, cover_path, 
-      like_counts, status, create_time
+      video_desc,
+      video_path,
+      video_seconds,
+      video_width,
+      video_height,
+      cover_path,
+      <if test="likeCounts != null">
+      like_counts,
+      </if>
+      status,
+      create_time
       )
-    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{audioId,jdbcType=VARCHAR}, 
-      #{videoDesc,jdbcType=VARCHAR}, #{videoPath,jdbcType=VARCHAR}, #{videoSeconds,jdbcType=REAL}, 
-      #{videoWidth,jdbcType=INTEGER}, #{videoHeight,jdbcType=INTEGER}, #{coverPath,jdbcType=VARCHAR}, 
-      #{likeCounts,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+    values (
+      #{id,jdbcType=VARCHAR},
+      #{userId,jdbcType=VARCHAR},
+      #{audioId,jdbcType=VARCHAR},
+      #{videoDesc,jdbcType=VARCHAR},
+      #{videoPath,jdbcType=VARCHAR},
+      #{videoSeconds,jdbcType=REAL},
+      #{videoWidth,jdbcType=INTEGER},
+      #{videoHeight,jdbcType=INTEGER},
+      #{coverPath,jdbcType=VARCHAR},
+      <if test="likeCounts != null">
+      #{likeCounts,jdbcType=BIGINT},
+      </if>
+      #{status,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.nekosighed.pojo.model.Videos">
@@ -71,4 +90,10 @@
     video_height, cover_path, like_counts, status, create_time
     from videos
   </select>
+
+  <update id="updateForCover" parameterType="String">
+    update videos
+    set cover_path = #{coverPath, jdbcType=VARCHAR}
+    where id = #{videoId, jdbcType=VARCHAR}
+  </update>
 </mapper>
