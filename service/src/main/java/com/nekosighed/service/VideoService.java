@@ -1,5 +1,6 @@
 package com.nekosighed.service;
 
+import com.nekosighed.common.utils.PagedResult;
 import com.nekosighed.pojo.model.Videos;
 
 public interface VideoService {
@@ -20,4 +21,11 @@ public interface VideoService {
      */
     int updateVideoForCoverPath(String videoId, String coverPath);
 
+    /**
+     * 分页查询 视频信息
+     *
+     * @param page
+     * @param pageSize
+     */
+    PagedResult getAllVideosByPage(Integer page, Integer pageSize);
 }

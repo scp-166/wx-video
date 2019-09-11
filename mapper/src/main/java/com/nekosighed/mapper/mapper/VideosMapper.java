@@ -1,5 +1,6 @@
 package com.nekosighed.mapper.mapper;
 
+import com.nekosighed.pojo.Vo.VideosVo;
 import com.nekosighed.pojo.model.Videos;
 import org.apache.ibatis.annotations.Param;
 
@@ -41,6 +42,12 @@ public interface VideosMapper {
      */
     int updateByPrimaryKey(Videos record);
 
+    /**
+     * 更新 视频封面
+     * @param videoId
+     * @param coverPath
+     * @return
+     */
     int updateForCover(@Param("videoId") String videoId, @Param("coverPath") String coverPath);
 
 }

@@ -1,7 +1,12 @@
 package com.nekosighed.service.imp;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.nekosighed.common.utils.PagedResult;
 import com.nekosighed.common.utils.UuidUtils;
 import com.nekosighed.mapper.mapper.VideosMapper;
+import com.nekosighed.mapper.mapper.vo.VideosVoMapper;
+import com.nekosighed.pojo.Vo.VideosVo;
 import com.nekosighed.pojo.model.Videos;
 import com.nekosighed.service.VideoService;
 import org.slf4j.Logger;
@@ -11,6 +16,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class VideoServiceImpl implements VideoService {
@@ -18,6 +24,9 @@ public class VideoServiceImpl implements VideoService {
 
     @Resource
     private VideosMapper videosMapper;
+
+    @Resource
+    private VideosVoMapper videosVoMapper;
 
     /**
      * 保存 video 信息
@@ -48,5 +57,30 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public int updateVideoForCoverPath(String videoId, String coverPath) {
         return videosMapper.updateForCover(videoId, coverPath);
+    }
+
+    /**
+     * 分页查询 视频相关信息
+     * @param page
+     * @param pageSize
+     */
+    @Override
+    public PagedResult getAllVideosByPage(Integer page, Integer pageSize) {
+        // 开始分页
+        PageHelper.startPage(page, pageSize);
+        List<VideosVo> videosVoList = videosVoMapper.queryAllVideo();
+        // 切割分页内容到 PageInfo 中
+        PageInfo<VideosVo> pageInfo = new PageInfo<>(videosVoList);
+        // 包装内容
+        PagedResult pagedResult = new PagedResult();
+
+        pagedResult.setExpectPageSize(pageSize);
+        pagedResult.setActualPageSize(pageInfo.getSize());
+        pagedResult.setCurrentPage(pageInfo.getPageNum());
+        pagedResult.setTotalPages(pageInfo.getPages());
+        pagedResult.setTotalRecord(pageInfo.getTotal());
+        pagedResult.setRows(videosVoList);
+
+        return pagedResult;
     }
 }

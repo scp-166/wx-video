@@ -22,6 +22,12 @@ public class BaseController {
     final static String REDIS_SESSION_PREFIX = "redis-session-prefix";
 
     /**
+     * 期望分页每页的数量
+     */
+    final static Integer PAGE_SIZE = 2;
+
+
+    /**
      * 给指定用户设置 redis session
      *
      * @param usersWithId

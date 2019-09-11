@@ -4,6 +4,7 @@ import com.nekosighed.common.comonenum.BusinessErrorEnum;
 import com.nekosighed.common.comonenum.status.VideoStatusEnum;
 import com.nekosighed.common.utils.FFMPEGUtils;
 import com.nekosighed.common.utils.JsonResult;
+import com.nekosighed.common.utils.PagedResult;
 import com.nekosighed.common.utils.UuidUtils;
 import com.nekosighed.pojo.Dto.UploadVideoInfoDto;
 import com.nekosighed.pojo.model.Bgm;
@@ -34,7 +35,7 @@ import java.util.Optional;
 @Validated
 @RestController
 @RequestMapping("/video")
-public class VideoController {
+public class VideoController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(VideoController.class);
 
     @Resource
@@ -75,7 +76,7 @@ public class VideoController {
         }
 
         // 最后要保存的文件名
-        String targetVideo = parentDir + secondVideoDir + file.getOriginalFilename();
+        String targetVideo = parentDir + secondVideoDir + "/" + file.getOriginalFilename();
 
         // 不放在上面 IOUtils 中是因为避免 File 使用了未关闭流的文件，导致出错
         //       ffmpeag 出错了很多次
@@ -119,8 +120,8 @@ public class VideoController {
 
         video.setAudioId(uploadVideoInfoDto.getAudioId());
         video.setStatus(VideoStatusEnum.PUBLISH_SUCCESS.getValue());
-        video.setVideoPath(secondProcessVideoDir + file.getOriginalFilename());
-        video.setCoverPath(secondProcessVideoDir + targetPrefix + ".jpg");
+        video.setVideoPath(secondProcessVideoDir + "/" +file.getOriginalFilename());
+        video.setCoverPath(secondVideoDir + "/" + targetPrefix + ".jpeg");
         video.setCreateTime(new Date());
 
         if (Optional.ofNullable(videoService.saveVideo(video)).isPresent()) {
@@ -180,5 +181,18 @@ public class VideoController {
         } else {
             return JsonResult.detailResponse(BusinessErrorEnum.VIDEO_COVER_SAVE_ERROR);
         }
+    }
+
+    @ApiOperation(value = "分页查询总视频")
+    @ApiImplicitParam(value = "期望查询页数", name = "pageNum", dataType = "Integer", paramType = "query")
+    @PostMapping("/showVideo")
+    public JsonResult showAllVideoByPage(@RequestParam(required = false) Integer pageNum){
+        System.out.println(pageNum);
+        if (pageNum == null || pageNum <= 0){
+            pageNum = 1;
+        }
+        PagedResult result = videoService.getAllVideosByPage(pageNum, PAGE_SIZE);
+
+        return JsonResult.success("成功获取分页数据", result);
     }
 }

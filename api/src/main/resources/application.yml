@@ -6,7 +6,7 @@ mybatis:
     default-fetch-size: 100
     default-statement-timeout: 3000
     map-underscore-to-camel-case: true  # mapper中的下划线和pojo的驼峰对应
-  mapper-locations: classpath:mapper/*.xml  # mapper的xml文件位置, classpath介绍:  https://blog.csdn.net/mrl6140x/article/details/78077942
+  mapper-locations: classpath:mapper/**/*.xml  # mapper的xml文件位置, classpath介绍:  https://blog.csdn.net/mrl6140x/article/details/78077942
 #  config-location: classpath:mybatis/mybatis-config.xml  # 属性映射 https://coding.imooc.com/lesson/217.html#mid=14256
 
 
