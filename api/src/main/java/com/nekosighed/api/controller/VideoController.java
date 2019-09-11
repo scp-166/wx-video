@@ -22,6 +22,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
@@ -99,6 +100,18 @@ public class VideoController {
             }
         }
 
+        // 使用 ffmpeg 对视频进行截图
+        // 复用指定 截图名称
+        String targetPic = file.getOriginalFilename();
+        int index = targetPic.lastIndexOf(".");
+        String targetPrefix = targetPic.substring(0, index);
+        String picSuffix = targetPic.substring(index + 1);
+        targetPic = parentDir + secondVideoDir + "/" + targetPrefix + ".jpeg";
+
+        if (!FFMPEGUtils.screenshots(targetVideo, targetPic)){
+            return JsonResult.detailResponse(BusinessErrorEnum.FILE_OPERATION_ERROR);
+        }
+
         // 保存信息
         Videos video = new Videos();
         // 拷贝字段
@@ -107,6 +120,7 @@ public class VideoController {
         video.setAudioId(uploadVideoInfoDto.getAudioId());
         video.setStatus(VideoStatusEnum.PUBLISH_SUCCESS.getValue());
         video.setVideoPath(secondProcessVideoDir + file.getOriginalFilename());
+        video.setCoverPath(secondProcessVideoDir + targetPrefix + ".jpg");
         video.setCreateTime(new Date());
 
         if (Optional.ofNullable(videoService.saveVideo(video)).isPresent()) {
@@ -117,6 +131,15 @@ public class VideoController {
         }
     }
 
+    /**
+     * 上传视频截图 接口
+     * 由于小程序端调用 wx.chooseVideo 在手机端无法获取截图，目前弃用
+     * @param userId
+     * @param videoId
+     * @param file
+     * @return
+     */
+    @ApiIgnore
     @ApiImplicitParams({
             @ApiImplicitParam(value = "用户id", name = "userId", dataType = "String", paramType = "form", required = true),
             @ApiImplicitParam(value = "视频id", name = "videoId", dataType = "String", paramType = "form", required = true)

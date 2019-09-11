@@ -39,9 +39,6 @@ public class FFMPEGUtils {
      * @return
      */
     public static boolean mergerVideoAndAudio(String video, String audio, double seconds, String target) {
-        logger.error(video);
-        logger.error(audio);
-        logger.error(target);
         if (!new File(video).exists()) {
             logger.info("视频源 {} 不存在", video);
         }
@@ -65,13 +62,13 @@ public class FFMPEGUtils {
         // 合成两个音频后的临时音频
         String tmpAudio = "H:/" + UuidUtils.createUUID() + ".mp3";
 
-        if (invoke(videoSeparateToVideo(video, tmpSeparateVideo)) == 0) {
+        if (invoke(CommandProducer.videoSeparateToVideo(video, tmpSeparateVideo)) == 0) {
             count++;
-            if (invoke(videoSeparateToAudio(video, tmpSeparateAudio)) == 0) {
+            if (invoke(CommandProducer.videoSeparateToAudio(video, tmpSeparateAudio)) == 0) {
                 count++;
-                if (invoke(mergeAudioToNewAudio(audio, tmpSeparateAudio, tmpAudio, seconds)) == 0) {
+                if (invoke(CommandProducer.mergeAudioToNewAudio(audio, tmpSeparateAudio, tmpAudio, seconds)) == 0) {
                     count++;
-                    if (invoke(mergeVideoAudioToNewVideo(tmpAudio, tmpSeparateVideo, target, seconds)) == 0) {
+                    if (invoke(CommandProducer.mergeVideoAudioToNewVideo(tmpAudio, tmpSeparateVideo, target, seconds)) == 0) {
                         count++;
                     } else {
                         logger.warn("合并视频和音频失败");
@@ -106,104 +103,13 @@ public class FFMPEGUtils {
     }
 
     /**
-     * 分离视频流
-     *
-     * @param filesToBeProcessed
-     * @param outPutVideoFile
+     * 视频截图
+     * @param sourceAudio
+     * @param targetPic
      * @return
      */
-    private static List<String> videoSeparateToVideo(String filesToBeProcessed, String outPutVideoFile) {
-        // 对文件名进行判别
-
-        // ffmpeg.exe -i H:\video.mp4 -vcodec copy -an -y H:\source.mp4
-        List<String> commandList = new ArrayList<>();
-        commandList.add(FFMPEG_EXE);
-        commandList.add("-i");
-        commandList.add(filesToBeProcessed);
-        // 设定视频编解码器，未设定时则使用与输入流相同的编解码器
-        commandList.add("-vcodec");
-        // 使用 -i 相同的编解码器
-        commandList.add("copy");
-        // 不处理音频
-        commandList.add("-an");
-        commandList.add("-y");
-        commandList.add(outPutVideoFile);
-        logger.info(commandList.toString());
-        return commandList;
-    }
-
-    /**
-     * 分离音频
-     *
-     * @param filesToBeProcessed
-     * @param outputAudioFile
-     * @return
-     */
-    private static List<String> videoSeparateToAudio(String filesToBeProcessed, String outputAudioFile) {
-        // ffmpeg.exe -i H:\video.mp4 -acodec copy -vn -y H:\source2.mp4
-        List<String> commandList = new ArrayList<>();
-        commandList.add(FFMPEG_EXE);
-        commandList.add("-i");
-        commandList.add(filesToBeProcessed);
-        // 设定声音编解码器，未设定时则使用与输入流相同的编解码器
-        commandList.add("-acodec");
-        // 设置为解码器为 libmp3lame; 不设置则填入 copy
-        commandList.add("libmp3lame");
-        // 不处理视频
-        commandList.add("-vn");
-        commandList.add("-y");
-        commandList.add(outputAudioFile);
-        logger.info(commandList.toString());
-        return commandList;
-    }
-
-    /**
-     * 合并音频
-     *
-     * @param firstAudio
-     * @param secondAudio
-     * @param targetAudio
-     * @param seconds
-     * @return
-     */
-    private static List<String> mergeAudioToNewAudio(String firstAudio, String secondAudio, String targetAudio, double seconds) {
-        // 使用 输入1 的时长
-        // ffmpeg.exe -i H:\music.mp3 -i H:\music2.mp3 -filter_complex amix=inputs=2:duration=first:dropout_transition=1 H:\aaa.mp3
-        // 使用 -t 的时长
-        // ffmpeg.exe -i H:\music.mp3 -i H:\music2.mp3 -filter_complex amix=inputs=2:dropout_transition=1 -t 10 H:\aaa.mp3
-        List<String> commandList = new ArrayList<>();
-        commandList.add(FFMPEG_EXE);
-        commandList.add("-i");
-        commandList.add(firstAudio);
-        commandList.add("-i");
-        commandList.add(secondAudio);
-        commandList.add("-filter_complex");
-        // 使用 输入1 的时长
-        // commandList.add("amix=inputs=2:duration=first:dropout_transition=2")；
-        // 不使用 输入1 的时长
-        commandList.add("amix=inputs=2:dropout_transition=2");
-        // 设置时长
-        commandList.add("-t");
-        commandList.add(String.valueOf(seconds));
-        commandList.add("-y");
-        commandList.add(targetAudio);
-        logger.info(commandList.toString());
-        return commandList;
-    }
-
-    private static List<String> mergeVideoAudioToNewVideo(String audio, String video, String targetVideo, double seconds) {
-        List<String> commandList = new ArrayList<>();
-        commandList.add(FFMPEG_EXE);
-        commandList.add("-i");
-        commandList.add(audio);
-        commandList.add("-i");
-        commandList.add(video);
-        commandList.add("-t");
-        commandList.add(String.valueOf(seconds));
-        commandList.add("-y");
-        commandList.add(targetVideo);
-        logger.info(commandList.toString());
-        return commandList;
+    public static boolean screenshots(String sourceAudio, String targetPic){
+        return invoke(CommandProducer.screenshot(sourceAudio, targetPic)) == 0;
     }
 
 
@@ -219,12 +125,12 @@ public class FFMPEGUtils {
         try {
             process = builder.start();
             try (InputStreamReader inputStreamReader = new InputStreamReader(process.getErrorStream());
-                 BufferedReader reader = new BufferedReader(inputStreamReader);
+                 BufferedReader reader = new BufferedReader(inputStreamReader)
             ) {
                 // 避免卡死?
                 String str;
-                while ((str=reader.readLine()) != null) {
-                    System.out.println(str);
+                while ((str = reader.readLine()) != null) {
+                     System.out.println(str);
                 }
             }
             process.destroy();
@@ -234,4 +140,150 @@ public class FFMPEGUtils {
         }
         return -1;
     }
+
+    /**
+     * 指令类
+     */
+    private static class CommandProducer {
+        /**
+         * 分离视频流
+         *
+         * @param filesToBeProcessed
+         * @param outPutVideoFile
+         * @return
+         */
+        private static List<String> videoSeparateToVideo(String filesToBeProcessed, String outPutVideoFile) {
+            // 对文件名进行判别
+
+            // ffmpeg.exe -i H:\video.mp4 -vcodec copy -an -y H:\source.mp4
+            List<String> commandList = new ArrayList<>(8);
+            commandList.add(FFMPEG_EXE);
+            commandList.add("-i");
+            commandList.add(filesToBeProcessed);
+            // 设定视频编解码器，未设定时则使用与输入流相同的编解码器
+            commandList.add("-vcodec");
+            // 使用 -i 相同的编解码器
+            commandList.add("copy");
+            // 不处理音频
+            commandList.add("-an");
+            commandList.add("-y");
+            commandList.add(outPutVideoFile);
+            logger.info(commandList.toString());
+            return commandList;
+        }
+
+        /**
+         * 分离音频
+         *
+         * @param filesToBeProcessed
+         * @param outputAudioFile
+         * @return
+         */
+        private static List<String> videoSeparateToAudio(String filesToBeProcessed, String outputAudioFile) {
+            // ffmpeg.exe -i H:\video.mp4 -acodec copy -vn -y H:\source2.mp4
+            List<String> commandList = new ArrayList<>(8);
+            commandList.add(FFMPEG_EXE);
+            commandList.add("-i");
+            commandList.add(filesToBeProcessed);
+            // 设定声音编解码器，未设定时则使用与输入流相同的编解码器
+            commandList.add("-acodec");
+            // 设置为解码器为 libmp3lame; 不设置则填入 copy
+            commandList.add("libmp3lame");
+            // 不处理视频
+            commandList.add("-vn");
+            commandList.add("-y");
+            commandList.add(outputAudioFile);
+            logger.info(commandList.toString());
+            return commandList;
+        }
+
+        /**
+         * 合并音频
+         *
+         * @param firstAudio
+         * @param secondAudio
+         * @param targetAudio
+         * @param seconds
+         * @return
+         */
+        private static List<String> mergeAudioToNewAudio(String firstAudio, String secondAudio, String targetAudio, double seconds) {
+            // 使用 输入1 的时长
+            // ffmpeg.exe -i H:\music.mp3 -i H:\music2.mp3 -filter_complex amix=inputs=2:duration=first:dropout_transition=1 H:\aaa.mp3
+            // 使用 -t 的时长
+            // ffmpeg.exe -i H:\music.mp3 -i H:\music2.mp3 -filter_complex amix=inputs=2:dropout_transition=1 -t 10 H:\aaa.mp3
+            List<String> commandList = new ArrayList<>(11);
+            commandList.add(FFMPEG_EXE);
+            commandList.add("-i");
+            commandList.add(firstAudio);
+            commandList.add("-i");
+            commandList.add(secondAudio);
+            commandList.add("-filter_complex");
+            // 使用 输入1 的时长
+            // commandList.add("amix=inputs=2:duration=first:dropout_transition=2")；
+            // 不使用 输入1 的时长
+            commandList.add("amix=inputs=2:dropout_transition=2");
+            // 设置时长
+            commandList.add("-t");
+            commandList.add(String.valueOf(seconds));
+            commandList.add("-y");
+            commandList.add(targetAudio);
+            logger.info(commandList.toString());
+            return commandList;
+        }
+
+        /**
+         * 合并 视频和音频
+         *
+         * @param sourceAudio
+         * @param sourceVideo
+         * @param targetVideo
+         * @param seconds
+         * @return
+         */
+        private static List<String> mergeVideoAudioToNewVideo(String sourceAudio, String sourceVideo, String targetVideo, double seconds) {
+            List<String> commandList = new ArrayList<>(9);
+            commandList.add(FFMPEG_EXE);
+            commandList.add("-i");
+            commandList.add(sourceAudio);
+            commandList.add("-i");
+            commandList.add(sourceVideo);
+            commandList.add("-t");
+            commandList.add(String.valueOf(seconds));
+            commandList.add("-y");
+            commandList.add(targetVideo);
+            logger.info(commandList.toString());
+            return commandList;
+        }
+
+        /**
+         * 对单个视频进行 1s 处截图
+         *
+         * @param sourceAudio
+         * @param targetPic
+         * @return
+         */
+        private static List<String> screenshot(String sourceAudio, String targetPic) {
+            List<String> commandList = new ArrayList<>();
+            commandList.add(FFMPEG_EXE);
+            // 调到指定位置，注意参数放置前面可以加快速度
+            commandList.add("-ss");
+            commandList.add("00:00:01");
+            commandList.add("-i");
+            commandList.add(sourceAudio);
+            // 生成截图
+            commandList.add("-vframes");
+            commandList.add("1");
+            // 无需音频
+            commandList.add("-an");
+            // 指定生成的格式. 用 -vcodec 也行
+            commandList.add("-f");
+            commandList.add("mjpeg");
+            // commandList.add("png");
+            commandList.add(targetPic);
+            logger.info(commandList.toString());
+            return commandList;
+        }
+    }
+
+
 }
