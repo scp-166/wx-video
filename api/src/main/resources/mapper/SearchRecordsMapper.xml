@@ -41,4 +41,9 @@
     select id, content
     from search_records
   </select>
+
+<!-- 搜索热词，首个热度最高  -->
+  <select id="getHotWords" resultType="java.lang.String">
+    select content from search_records group by content order by count(content) desc
+  </select>
 </mapper>

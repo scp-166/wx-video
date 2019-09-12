@@ -7,9 +7,11 @@ import com.nekosighed.common.utils.JsonResult;
 import com.nekosighed.common.utils.PagedResult;
 import com.nekosighed.common.utils.UuidUtils;
 import com.nekosighed.pojo.Dto.UploadVideoInfoDto;
+import com.nekosighed.pojo.Dto.VideosDto;
 import com.nekosighed.pojo.model.Bgm;
 import com.nekosighed.pojo.model.Videos;
 import com.nekosighed.service.imp.BgmServiceImpl;
+import com.nekosighed.service.imp.SearchRecordsServiceImpl;
 import com.nekosighed.service.imp.VideoServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -43,6 +45,9 @@ public class VideoController extends BaseController {
 
     @Resource
     private VideoServiceImpl videoService;
+
+    @Resource
+    private SearchRecordsServiceImpl searchRecordsService;
 
     @ApiOperation(value = "上传视频接口")
     @PostMapping(value = "/uploadVideo")
@@ -109,7 +114,7 @@ public class VideoController extends BaseController {
         String picSuffix = targetPic.substring(index + 1);
         targetPic = parentDir + secondVideoDir + "/" + targetPrefix + ".jpeg";
 
-        if (!FFMPEGUtils.screenshots(targetVideo, targetPic)){
+        if (!FFMPEGUtils.screenshots(targetVideo, targetPic)) {
             return JsonResult.detailResponse(BusinessErrorEnum.FILE_OPERATION_ERROR);
         }
 
@@ -120,7 +125,7 @@ public class VideoController extends BaseController {
 
         video.setAudioId(uploadVideoInfoDto.getAudioId());
         video.setStatus(VideoStatusEnum.PUBLISH_SUCCESS.getValue());
-        video.setVideoPath(secondProcessVideoDir + "/" +file.getOriginalFilename());
+        video.setVideoPath(secondProcessVideoDir + "/" + file.getOriginalFilename());
         video.setCoverPath(secondVideoDir + "/" + targetPrefix + ".jpeg");
         video.setCreateTime(new Date());
 
@@ -135,6 +140,7 @@ public class VideoController extends BaseController {
     /**
      * 上传视频截图 接口
      * 由于小程序端调用 wx.chooseVideo 在手机端无法获取截图，目前弃用
+     *
      * @param userId
      * @param videoId
      * @param file
@@ -183,16 +189,35 @@ public class VideoController extends BaseController {
         }
     }
 
-    @ApiOperation(value = "分页查询总视频")
+    @ApiOperation(value = "首页分页查询视频")
     @ApiImplicitParam(value = "期望查询页数", name = "pageNum", dataType = "Integer", paramType = "query")
     @PostMapping("/showVideo")
-    public JsonResult showAllVideoByPage(@RequestParam(required = false) Integer pageNum){
-        System.out.println(pageNum);
-        if (pageNum == null || pageNum <= 0){
+    public JsonResult showAllVideoByPage(@RequestParam(required = false) Integer pageNum) {
+        if (pageNum == null || pageNum <= 0) {
             pageNum = 1;
         }
-        PagedResult result = videoService.getAllVideosByPage(pageNum, PAGE_SIZE);
+        PagedResult result = videoService.getAllVideosByPage(null, pageNum, PAGE_SIZE);
 
         return JsonResult.success("成功获取分页数据", result);
+    }
+
+    @ApiOperation(value = "分页查询搜索视频")
+    @ApiImplicitParam(value = "期望查询页数", name = "pageNum", dataType = "Integer", paramType = "form")
+    @PostMapping("/showVideoByHotTips")
+    public JsonResult showAllVideoByPageAndHotTips(@RequestBody VideosDto videosDto, @RequestParam(required = false) Integer pageNum) {
+        if (pageNum == null || pageNum <= 0) {
+            pageNum = 1;
+        }
+        // 添加搜索记录
+        searchRecordsService.addHotWord(videosDto.getVideoDesc());
+
+        PagedResult result = videoService.getAllVideosByPage(videosDto, pageNum, PAGE_SIZE);
+        return JsonResult.success("成功搜索内容", result);
+    }
+
+    @ApiOperation(value = "获得热词列表")
+    @GetMapping("/hotWords")
+    public JsonResult showHotWord() {
+        return JsonResult.success("获取热词成功", searchRecordsService.getHotWords());
     }
 }

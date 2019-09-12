@@ -39,4 +39,11 @@ public interface SearchRecordsMapper {
      * @CreateDate: 2019-09-07 13:23:25
      */
     int updateByPrimaryKey(SearchRecords record);
+
+    /**
+     * 查询 热词
+     *
+     * @return
+     */
+    List<String> getHotWords();
 }

@@ -24,6 +24,10 @@
     select v.*, u.username, u.face_image from videos v
     left join users u
     on u.id = v.user_id
+    <if test="videoDesc != null and videoDesc != ''">
+    where
+      video_desc like concat(concat('%', #{videoDesc}), '%')
+    </if>
     order by v.create_time desc
   </select>
 </mapper>

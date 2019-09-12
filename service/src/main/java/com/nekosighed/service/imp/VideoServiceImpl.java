@@ -6,6 +6,7 @@ import com.nekosighed.common.utils.PagedResult;
 import com.nekosighed.common.utils.UuidUtils;
 import com.nekosighed.mapper.mapper.VideosMapper;
 import com.nekosighed.mapper.mapper.vo.VideosVoMapper;
+import com.nekosighed.pojo.Dto.VideosDto;
 import com.nekosighed.pojo.Vo.VideosVo;
 import com.nekosighed.pojo.model.Videos;
 import com.nekosighed.service.VideoService;
@@ -61,14 +62,22 @@ public class VideoServiceImpl implements VideoService {
 
     /**
      * 分页查询 视频相关信息
+     *
+     * @param videosDto
      * @param page
      * @param pageSize
      */
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public PagedResult getAllVideosByPage(Integer page, Integer pageSize) {
+    public PagedResult getAllVideosByPage(VideosDto videosDto, Integer page, Integer pageSize) {
+        String desc = "";
+        if (videosDto != null){
+            desc = videosDto.getVideoDesc();
+        }
+
         // 开始分页
         PageHelper.startPage(page, pageSize);
-        List<VideosVo> videosVoList = videosVoMapper.queryAllVideo();
+        List<VideosVo> videosVoList = videosVoMapper.queryAllVideo(desc);
         // 切割分页内容到 PageInfo 中
         PageInfo<VideosVo> pageInfo = new PageInfo<>(videosVoList);
         // 包装内容

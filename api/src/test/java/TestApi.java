@@ -60,7 +60,7 @@ public class TestApi {
 
     @Test
     public void testVo() {
-        System.out.println(mapper.queryAllVideo());
+
     }
 
     @Resource
