@@ -82,6 +82,7 @@ public class VideoController extends BaseController {
 
         // 最后要保存的文件名
         String targetVideo = parentDir + secondVideoDir + "/" + file.getOriginalFilename();
+        String saveVideo = secondVideoDir + "/" + file.getOriginalFilename();
 
         // 不放在上面 IOUtils 中是因为避免 File 使用了未关闭流的文件，导致出错
         //       ffmpeag 出错了很多次
@@ -94,7 +95,8 @@ public class VideoController extends BaseController {
                 // 补全文件地址
                 audioPath = parentDir + audioPath;
                 // 修改 保存的文件名
-                targetVideo = parentDir + secondProcessVideoDir + "/" + UuidUtils.createUUID() + ".mp4";
+                targetVideo = parentDir + secondProcessVideoDir + "/" + file.getOriginalFilename();
+                saveVideo = secondProcessVideoDir + "/" + file.getOriginalFilename();
                 // 合并视频和音频
                 FFMPEGUtils.mergerVideoAndAudio(
                         outPutFile.getAbsolutePath(),
@@ -125,7 +127,7 @@ public class VideoController extends BaseController {
 
         video.setAudioId(uploadVideoInfoDto.getAudioId());
         video.setStatus(VideoStatusEnum.PUBLISH_SUCCESS.getValue());
-        video.setVideoPath(secondProcessVideoDir + "/" + file.getOriginalFilename());
+        video.setVideoPath(saveVideo);
         video.setCoverPath(secondVideoDir + "/" + targetPrefix + ".jpeg");
         video.setCreateTime(new Date());
 
