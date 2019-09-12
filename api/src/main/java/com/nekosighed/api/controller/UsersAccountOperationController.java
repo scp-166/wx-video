@@ -13,10 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
@@ -25,6 +22,7 @@ import java.util.Optional;
 @Api(tags = "小程序账号操作", description = "小程序交互①")
 @Validated
 @RestController
+@RequestMapping("/user")
 public class UsersAccountOperationController extends BaseController{
 
     private static final Logger logger = LoggerFactory.getLogger(UsersAccountOperationController.class);

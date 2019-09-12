@@ -1,6 +1,9 @@
 package com.nekosighed.api.config;
 
+import com.nekosighed.api.controller.interceptor.UserInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -10,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
     /**
      * 资源控制
+     *
      * @param registry
      */
     @Override
@@ -20,5 +24,32 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/")
                 // 可以查看 用户资源 保存路径
                 .addResourceLocations("file:/E:/wx_video/");
+    }
+
+    /**
+     * 将拦截器注册为 bean
+     *
+     * @return
+     */
+    @Bean
+    public UserInterceptor userInterceptor() {
+        return new UserInterceptor();
+    }
+
+    /**
+     * 注册 拦截器
+     *
+     * @param registry
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 将需要拦截的路径填入  支持 ant写法
+        registry.addInterceptor(userInterceptor())
+                .addPathPatterns("/user/**")
+                .addPathPatterns("/operation/**");
+        // 将所有注册信息进行注册
+        // 老版本写法
+        // super.addInterceptors(registry);
+        WebMvcConfigurer.super.addInterceptors(registry);
     }
 }
