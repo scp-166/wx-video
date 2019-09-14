@@ -1,9 +1,11 @@
+
 import com.nekosighed.ApplicationStart;
 import com.nekosighed.mapper.mapper.vo.VideosVoMapper;
 import com.nekosighed.service.VideoService;
 import com.nekosighed.service.imp.BgmServiceImpl;
 import com.nekosighed.service.imp.UsersServiceImpl;
 import com.nekosighed.service.imp.VideoServiceImpl;
+import jdk.nashorn.internal.runtime.logging.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApplicationStart.class)
@@ -78,6 +82,29 @@ public class TestApi {
 
         System.out.println(prefix);
         System.out.println(suffix);
+    }
+
+
+    private static String getTargetFileValueByKey(String fileUrl, String key) {
+        // 配置文件对象
+        Properties properties = new Properties();
+        try (FileInputStream fileInputStream = new FileInputStream(fileUrl)) {
+            // 加载输入流到配置文件对象中
+            properties.load(fileInputStream);
+            // 返回指定key对应的value
+            return properties.getProperty(key);
+        } catch (IOException e) {
+            System.out.println(e.toString());
+        }
+        return null;
+    }
+
+
+    @Test
+    public void testJson(){
+        System.out.println(System.getProperty("user.dir"));
+        String str = getTargetFileValueByKey("../ffmpeg.properties", "remote");
+        System.out.println(str);
     }
 
 }

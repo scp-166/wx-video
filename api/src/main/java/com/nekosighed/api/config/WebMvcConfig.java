@@ -1,12 +1,13 @@
 package com.nekosighed.api.config;
 
 import com.nekosighed.api.controller.interceptor.UserInterceptor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.annotation.Resource;
 
 @Configuration
 //public class WebMvcConfig extends WebMvcConfigurerAdapter 老版本写法
@@ -31,10 +32,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
      *
      * @return
      */
-    @Bean
-    public UserInterceptor userInterceptor() {
-        return new UserInterceptor();
-    }
+    @Resource
+    UserInterceptor userInterceptor;
 
     /**
      * 注册 拦截器
@@ -44,8 +43,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 将需要拦截的路径填入  支持 ant写法
-        registry.addInterceptor(userInterceptor())
-                .addPathPatterns("/user/**")
+        registry.addInterceptor(userInterceptor)
+                .addPathPatterns("/video/uploadVideo")
                 .addPathPatterns("/operation/**");
         // 将所有注册信息进行注册
         // 老版本写法

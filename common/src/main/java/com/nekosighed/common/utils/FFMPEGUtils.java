@@ -22,7 +22,7 @@ import java.util.List;
 public class FFMPEGUtils {
     private static final Logger logger = LoggerFactory.getLogger(FFMPEGUtils.class);
 
-    private static final String FFMPEG_EXE = "D:/development_tool/ffmpeg/bin/ffmpeg.exe";
+    private static final String FFMPEG_EXE = CommonUtils.getTargetFileValueByKey("../ffmepg.propertis", "remote");
 
     public static void main(String[] args) {
         mergerVideoAndAudio("H:/video.mp4", "H:/music.mp3", 20, "H:/targetbbb.mp4");

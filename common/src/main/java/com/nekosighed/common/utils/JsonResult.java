@@ -85,6 +85,23 @@ public class JsonResult extends ResponseEntity {
     }
 
     /**
+     * 请求错误响应
+     *
+     * @return
+     */
+    public static JsonResult badRequestError() {
+        return badRequestError("", "");
+    }
+
+    public static JsonResult badRequestError(String msg) {
+        return badRequestError(msg, "");
+    }
+
+    public static JsonResult badRequestError(String msg, Object data) {
+        return new JsonResult(fillData(SimpleEnum.RESPONSE_BAD_REQUEST.getNum(), msg, data), HttpStatus.BAD_REQUEST);
+    }
+
+    /**
      * 失败响应
      *
      * @return JsonResult

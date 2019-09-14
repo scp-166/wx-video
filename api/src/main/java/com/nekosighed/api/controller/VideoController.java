@@ -203,7 +203,7 @@ public class VideoController extends BaseController {
         return JsonResult.success("成功获取分页数据", result);
     }
 
-    @ApiOperation(value = "分页查询搜索视频")
+    @ApiOperation(value = "查询搜索视频")
     @ApiImplicitParam(value = "期望查询页数", name = "pageNum", dataType = "Integer", paramType = "form")
     @PostMapping("/showVideoByHotTips")
     public JsonResult showAllVideoByPageAndHotTips(@RequestBody VideosDto videosDto, @RequestParam(required = false) Integer pageNum) {

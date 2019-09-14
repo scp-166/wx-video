@@ -2,6 +2,7 @@ package com.nekosighed.api.controller;
 
 
 import com.nekosighed.common.comonenum.ConstantEnum;
+import com.nekosighed.common.comonenum.PrefixEnum;
 import com.nekosighed.common.utils.RedisUtils;
 import com.nekosighed.common.utils.UuidUtils;
 import com.nekosighed.pojo.Vo.UsersVo;
@@ -16,10 +17,6 @@ public class BaseController {
     @Resource
     RedisUtils redisUtils;
 
-    /**
-     * redis session 名 前缀
-     */
-    final static String REDIS_SESSION_PREFIX = "redis-session-prefix";
 
     /**
      * 期望分页每页的数量
@@ -35,7 +32,7 @@ public class BaseController {
      */
     UsersVo setRedisSessionForUsers(Users usersWithId) {
         String uuid = UuidUtils.createUUID();
-        redisUtils.set(REDIS_SESSION_PREFIX + ":" + usersWithId.getId(), uuid, ConstantEnum.REDIS_SESSION_EXPIRE_TIME.getValue());
+        redisUtils.set(PrefixEnum.REDIS_SESSION_PREFIX.getName() + ":" + usersWithId.getId(), uuid, ConstantEnum.REDIS_SESSION_EXPIRE_TIME.getValue());
         UsersVo usersVo = new UsersVo();
         // 复制属性
         BeanUtils.copyProperties(usersWithId, usersVo);
@@ -50,6 +47,6 @@ public class BaseController {
      * @param userId
      */
     void delRedisSessionForUsers(String userId) {
-        redisUtils.del(REDIS_SESSION_PREFIX + ":" + userId);
+        redisUtils.del(PrefixEnum.REDIS_SESSION_PREFIX.getName() + ":" + userId);
     }
 }
