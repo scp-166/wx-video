@@ -44,8 +44,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 将需要拦截的路径填入  支持 ant写法
         registry.addInterceptor(userInterceptor)
-                .addPathPatterns("/video/uploadVideo")
-                .addPathPatterns("/operation/**");
+                .addPathPatterns("/video/uploadVideo", "/video/likeVideo", "/video/unlikeVideo")
+                .addPathPatterns("/operation/**").excludePathPatterns("/operation/publisherInfo");
         // 将所有注册信息进行注册
         // 老版本写法
         // super.addInterceptors(registry);

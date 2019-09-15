@@ -30,4 +30,22 @@ public interface VideoService {
      * @param pageSize
      */
     PagedResult getAllVideosByPage(VideosDto videosDto, Integer page, Integer pageSize);
+
+    /**
+     * 视频被点赞
+     *
+     * @param userId
+     * @param videoId
+     * @param videoAuthorId
+     */
+    void videoHaveBeenLike(String userId, String videoId, String videoAuthorId);
+
+    /**
+     * 视频被取消点赞
+     *
+     * @param userId
+     * @param videoId
+     * @param videoAuthor
+     */
+    void videoHaveBennUnlike(String userId, String videoId, String videoAuthor);
 }

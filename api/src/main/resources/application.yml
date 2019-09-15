@@ -1,7 +1,7 @@
 # 请注意，聚合项目的文件夹和文件全局课件
 
 mybatis:
-  type-aliases-package: com.nekosighed.mybatisGenerator.pojo.model  # 扫描的model类, 这里用到了 pojo 模块 的 com.nekosighed.mybatisGenerator.pojo.model 文件夹
+  type-aliases-package: com.nekosighed.pojo  # xml中扫描的model类, 这里用到了 pojo 模块 的 com.nekosighed.pojo 文件夹
   configuration:
     default-fetch-size: 100
     default-statement-timeout: 3000

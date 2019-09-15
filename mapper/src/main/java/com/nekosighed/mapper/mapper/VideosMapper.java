@@ -50,4 +50,20 @@ public interface VideosMapper {
      */
     int updateForCover(@Param("videoId") String videoId, @Param("coverPath") String coverPath);
 
+    /**
+     * 增加一次视频点赞数
+     *
+     * @param videoId
+     * @return
+     */
+    int incLikeCount(@Param("videoId") String videoId);
+
+    /**
+     * 减少一次视频点赞数
+     *
+     * @param videoId
+     * @return
+     */
+    int decLikeCount(@Param("videoId") String videoId);
+
 }

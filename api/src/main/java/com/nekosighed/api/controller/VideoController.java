@@ -12,6 +12,7 @@ import com.nekosighed.pojo.model.Bgm;
 import com.nekosighed.pojo.model.Videos;
 import com.nekosighed.service.imp.BgmServiceImpl;
 import com.nekosighed.service.imp.SearchRecordsServiceImpl;
+import com.nekosighed.service.imp.UsersLikeVideosServiceImpl;
 import com.nekosighed.service.imp.VideoServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -48,6 +49,9 @@ public class VideoController extends BaseController {
 
     @Resource
     private SearchRecordsServiceImpl searchRecordsService;
+
+    @Resource
+    private UsersLikeVideosServiceImpl usersLikeVideosService;
 
     @ApiOperation(value = "上传视频接口")
     @PostMapping(value = "/uploadVideo")
@@ -221,5 +225,30 @@ public class VideoController extends BaseController {
     @GetMapping("/hotWords")
     public JsonResult showHotWord() {
         return JsonResult.success("获取热词成功", searchRecordsService.getHotWords());
+    }
+
+    @ApiOperation(value = "视频点赞")
+    @PostMapping("/likeVideo")
+    public JsonResult likeVideo(@NotNull(message = "userId不能为空") String userId,
+                                @NotNull(message = "videoId不能为空") String videoId,
+                                @NotNull(message = "videoAuthorId不能为空") String videoAuthorId){
+        videoService.videoHaveBeenLike(userId, videoId, videoAuthorId);
+        return JsonResult.success();
+    }
+
+    @ApiOperation(value = "视频取消点赞")
+    @PostMapping("/unlikeVideo")
+    public JsonResult UnlikeVideo(@NotNull(message = "userId不能为空") String userId,
+                                  @NotNull(message = "videoId不能为空") String videoId,
+                                  @NotNull(message = "videoAuthorId不能为空") String videoAuthorId){
+        videoService.videoHaveBennUnlike(userId, videoId, videoAuthorId);
+        return JsonResult.success();
+    }
+
+    @ApiOperation(value = "判断用户是否喜欢该视频")
+    @PostMapping("/isLikeVideo")
+    public JsonResult isLike(@NotNull(message = "userId不能为空") String userId,
+                             @NotNull(message = "videoId不能为空") String videoId){
+        return JsonResult.success(usersLikeVideosService.isUserLikeVideo(userId, videoId)?"true":"no");
     }
 }

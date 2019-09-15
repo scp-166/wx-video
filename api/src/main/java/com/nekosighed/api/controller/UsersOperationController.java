@@ -79,8 +79,25 @@ public class UsersOperationController extends BaseController {
      * @return
      */
     @ApiImplicitParam(value = "用户id", name = "userId", required = true, dataType = "String", paramType = "query")
-    @GetMapping("/userInfo")
-    public JsonResult getUserInfo(@Validated @NotNull @RequestParam String userId){
+    @PostMapping("/userInfo")
+    public JsonResult getUserInfo(@NotNull @RequestParam String userId){
+        Users users = serviceImp.queryUserInfoByUserId(userId);
+        if (users == null){
+            return JsonResult.detailResponse(BusinessErrorEnum.USERS_NOT_FOUND);
+        }
+        UsersVo usersVo = new UsersVo();
+        BeanUtils.copyProperties(users, usersVo);
+        return JsonResult.success("获取成功", usersVo);
+    }
+
+    /**
+     * 获取发布者信息
+     * @param userId
+     * @return
+     */
+    @ApiImplicitParam(value = "发布者id", name = "publisherId", required = true, dataType = "String", paramType = "query")
+    @PostMapping("/publisherInfo")
+    public JsonResult getUserInfoWithUnAuth(@NotNull @RequestParam String userId){
         Users users = serviceImp.queryUserInfoByUserId(userId);
         if (users == null){
             return JsonResult.detailResponse(BusinessErrorEnum.USERS_NOT_FOUND);

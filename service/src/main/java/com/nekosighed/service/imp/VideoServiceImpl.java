@@ -4,10 +4,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.nekosighed.common.utils.PagedResult;
 import com.nekosighed.common.utils.UuidUtils;
+import com.nekosighed.mapper.mapper.UsersLikeVideosMapper;
+import com.nekosighed.mapper.mapper.UsersMapper;
 import com.nekosighed.mapper.mapper.VideosMapper;
 import com.nekosighed.mapper.mapper.vo.VideosVoMapper;
 import com.nekosighed.pojo.Dto.VideosDto;
 import com.nekosighed.pojo.Vo.VideosVo;
+import com.nekosighed.pojo.model.UsersLikeVideos;
 import com.nekosighed.pojo.model.Videos;
 import com.nekosighed.service.VideoService;
 import org.slf4j.Logger;
@@ -28,6 +31,12 @@ public class VideoServiceImpl implements VideoService {
 
     @Resource
     private VideosVoMapper videosVoMapper;
+
+    @Resource
+    private UsersMapper usersMapper;
+
+    @Resource
+    private UsersLikeVideosMapper usersLikeVideosMapper;
 
     /**
      * 保存 video 信息
@@ -91,5 +100,42 @@ public class VideoServiceImpl implements VideoService {
         pagedResult.setRows(videosVoList);
 
         return pagedResult;
+    }
+
+    /**
+     * 视频被点赞
+     *
+     * @param userId
+     * @param videoId
+     * @param videoAuthorId
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
+    public void videoHaveBeenLike(String userId, String videoId, String videoAuthorId) {
+        // 添加一次关联表记录，其中键都被设置了索引，避免重复重复添加
+        usersLikeVideosMapper.insert(new UsersLikeVideos(UuidUtils.createUUID(), userId, videoId));
+        // 视频作者增加获得点赞数
+        usersMapper.incReceiveLikeCount(videoAuthorId);
+        // 视频增加获得点赞数
+        videosMapper.incLikeCount(videoId);
+    }
+
+    /**
+     * 视频被取消点赞
+     *
+     * @param userId
+     * @param videoId
+     * @param videoAuthorId
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
+    public void videoHaveBennUnlike(String userId, String videoId, String videoAuthorId) {
+        // 删除关联表记录
+        usersLikeVideosMapper.deleteByUserIdVideoId(userId, videoId);
+        // 视频作品增加获得点赞数
+        usersMapper.decReceiveLikeCount(videoAuthorId);
+        // 视频减少获得点赞数
+        videosMapper.decLikeCount(videoId);
+
     }
 }

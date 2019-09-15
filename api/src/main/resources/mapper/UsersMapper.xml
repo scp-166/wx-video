@@ -65,4 +65,16 @@
     where username = #{username, jdbcType=VARCHAR}
     limit 1
   </select>
+
+  <update id="incReceiveLikeCount" parameterType="String">
+    update users
+    set receive_like_counts = receive_like_counts + 1
+    where id = #{userId}
+  </update>
+
+  <update id="decReceiveLikeCount" parameterType="String">
+    update users
+    set receive_like_counts = receive_like_counts - 1
+    where id = #{userId}
+  </update>
 </mapper>

@@ -45,4 +45,14 @@
     select id, user_id, video_id
     from users_like_videos
   </select>
+
+    <delete id="deleteByUserIdVideoId" parameterType="String">
+    delete from users_like_videos
+    where user_id = #{userId} and video_id = #{videoId}
+  </delete>
+
+  <select id="queryUserLikeVideos" resultType="com.nekosighed.pojo.model.UsersLikeVideos">
+    select * from users_like_videos
+    where user_id = #{userId} and video_id = #{videoId}
+  </select>
 </mapper>

@@ -9,6 +9,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -105,6 +106,18 @@ public class BadRequestNotifier {
                     JsonResult.error(NormalErrorEnum.OTHER_PARSING_ERROR.getMsg());
         }
         return JsonResult.error();
+    }
+
+    /**
+     * 不支持的请求方式
+     *
+     * @param exception
+     * @return
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public JsonResult httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception){
+        exception.printStackTrace();
+        return JsonResult.error("不支持的请求方式");
     }
 
 

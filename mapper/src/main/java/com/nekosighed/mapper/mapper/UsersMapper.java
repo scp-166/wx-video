@@ -47,4 +47,20 @@ public interface UsersMapper {
      * @return
      */
     Users selectByUsername(@Param("username") String username);
+
+    /**
+     * 由于视频被点赞而增加一次个人受点赞数
+     *
+     * @param userId
+     * @return
+     */
+    int incReceiveLikeCount(@Param("userId") String userId);
+
+    /**
+     * 由于视频被取消点赞而减少一次个人受点赞数
+     *
+     * @param userId
+     * @return
+     */
+    int decReceiveLikeCount(@Param("userId") String userId);
 }
