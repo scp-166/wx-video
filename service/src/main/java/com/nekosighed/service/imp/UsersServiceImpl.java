@@ -1,8 +1,10 @@
 package com.nekosighed.service.imp;
 
 import com.nekosighed.common.utils.UuidUtils;
+import com.nekosighed.mapper.mapper.UsersFansMapper;
 import com.nekosighed.mapper.mapper.UsersMapper;
 import com.nekosighed.pojo.model.Users;
+import com.nekosighed.pojo.model.UsersFans;
 import com.nekosighed.service.UsersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,9 @@ public class UsersServiceImpl implements UsersService {
 
     @Autowired
     private UsersMapper usersMapper;
+
+    @Autowired
+    private UsersFansMapper usersFansMapper;
 
     /**
      * 根据 username 查找 users信息
@@ -92,5 +97,39 @@ public class UsersServiceImpl implements UsersService {
             sourceUser.setFaceImage(users.getFaceImage());
             usersMapper.updateByPrimaryKey(sourceUser);
         }
+    }
+
+    /**
+     * 关注
+     *
+     * @param userId
+     * @param publisherId
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
+    public void followMe(String userId, String publisherId) {
+        // 添加一条关联表记录
+        usersFansMapper.insert(new UsersFans(UuidUtils.createUUID(), publisherId, userId));
+        // 添加发布者粉丝数量
+        usersMapper.incFansCount(publisherId);
+        // 添加关注者关注数量
+        usersMapper.incFollowCount(userId);
+    }
+
+    /**
+     * 取消关注
+     *
+     * @param userId
+     * @param publisherId
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
+    public void cancelFollowMe(String userId, String publisherId) {
+        // 删除关联表记录
+        usersFansMapper.deleteByPublisherIdFanId(publisherId, userId);
+        // 减少发布者粉丝数量
+        usersMapper.decFansCount(publisherId);
+        // 减少关注者关注数量
+        usersMapper.decFollowCount(userId);
     }
 }

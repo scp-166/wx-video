@@ -53,7 +53,7 @@ public class UserInterceptor implements HandlerInterceptor {
         }
         // 2. 校验 userId 对应 键是否存在
         if (StringUtils.isEmpty((String) redisUtils.get(PrefixEnum.REDIS_SESSION_PREFIX.getName() + ":" + userId))) {
-            fillResponseEntity(response, JsonResult.badRequestError("请登录"));
+            fillResponseEntity(response, JsonResult.badRequestError("请重新登录"));
             return false;
         }
 

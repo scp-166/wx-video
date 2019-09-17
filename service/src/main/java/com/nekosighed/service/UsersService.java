@@ -16,5 +16,9 @@ public interface UsersService {
 
     void upLoadFaceImg(Users users);
 
+    void followMe(String userId, String publisherId);
+
+    void cancelFollowMe(String userId, String publisherId);
+
 
 }

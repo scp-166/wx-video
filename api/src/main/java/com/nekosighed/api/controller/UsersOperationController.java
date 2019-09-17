@@ -5,9 +5,12 @@ import com.nekosighed.common.comonenum.BusinessErrorEnum;
 import com.nekosighed.common.utils.JsonResult;
 import com.nekosighed.pojo.Vo.UsersVo;
 import com.nekosighed.pojo.model.Users;
+import com.nekosighed.pojo.model.UsersReport;
+import com.nekosighed.service.imp.UsersReportServiceImpl;
 import com.nekosighed.service.imp.UsersServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -31,6 +34,9 @@ public class UsersOperationController extends BaseController {
 
     @Resource
     UsersServiceImpl serviceImp;
+
+    @Resource
+    UsersReportServiceImpl usersReportService;
 
     @ApiOperation(value = "用户上传头像接口")
     @PostMapping(value = "/uploadFace", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
@@ -105,5 +111,56 @@ public class UsersOperationController extends BaseController {
         UsersVo usersVo = new UsersVo();
         BeanUtils.copyProperties(users, usersVo);
         return JsonResult.success("获取成功", usersVo);
+    }
+
+    /**
+     * 关注
+     * 保留功能
+     *
+     * @param userId
+     * @param publisherId
+     * @return
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "用户id", name = "userId", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(value = "发布者id", name = "publisherId", required = true, dataType = "String", paramType = "query")
+    })
+    @PostMapping("/followMe")
+    public JsonResult followMe(@NotNull(message = "userId不能为空") String userId,
+                               @NotNull(message = "publisherId不能为空") String publisherId){
+        serviceImp.followMe(userId, publisherId);
+        return JsonResult.success();
+    }
+
+    /**
+     * 取消关注
+     * 保留功能
+     *
+     * @param userId
+     * @param publisherId
+     * @return
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "用户id", name = "userId", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(value = "发布者id", name = "publisherId", required = true, dataType = "String", paramType = "query")
+    })
+    @PostMapping("/cancelFollowMe")
+    public JsonResult cancelFollowMe(@NotNull(message = "userId不能为空") String userId,
+                                     @NotNull(message = "publisherId不能为空") String publisherId){
+        serviceImp.cancelFollowMe(userId, publisherId);
+        return JsonResult.success();
+    }
+
+    /**
+     * 用户举报接口
+     *
+     * @param usersReport
+     * @return
+     */
+    @ApiOperation(value = "举报接口")
+    @PostMapping("/report")
+    public JsonResult report(@Validated UsersReport usersReport){
+        usersReportService.addSingleReport(usersReport);
+        return JsonResult.success();
     }
 }

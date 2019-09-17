@@ -63,4 +63,36 @@ public interface UsersMapper {
      * @return
      */
     int decReceiveLikeCount(@Param("userId") String userId);
+
+    /**
+     * 由于被关注增加一个粉丝
+     *
+     * @param userId
+     * @return
+     */
+    int incFansCount(@Param("userId") String userId);
+
+    /**
+     * 由于被取消关注减少一个粉丝
+     *
+     * @param userId
+     * @return
+     */
+    int decFansCount(@Param("userId") String userId);
+
+    /**
+     * 由于关注了别人，增加一条自己的关注数量
+     *
+     * @param userId
+     * @return
+     */
+    int incFollowCount(@Param("userId") String userId);
+
+    /**
+     * 由于取消关注别人，减少一条自己的关注数量
+     * 
+     * @param userId
+     * @return
+     */
+    int decFollowCount(@Param("userId") String userId);
 }

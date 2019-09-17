@@ -16,7 +16,7 @@
     delete from users_fans
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.nekosighed.pojo.model.UsersFans">
+    <insert id="insert" parameterType="com.nekosighed.pojo.model.UsersFans">
     <!--
     -->
     insert into users_fans (id, user_id, fan_id
@@ -45,4 +45,9 @@
     select id, user_id, fan_id
     from users_fans
   </select>
+
+  <delete id="deleteByPublisherIdFanId">
+    delete from users_fans
+    where user_id = #{publisherId, jdbcType=VARCHAR} and fan_id = #{userId, jdbcType=VARCHAR}
+  </delete>
 </mapper>
